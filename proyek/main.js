@@ -275,6 +275,12 @@ var GL;
         leftEye.vertex[i + 4] = 17/255; // Green component
         leftEye.vertex[i + 5] = 95/255; // Blue component
       }
+      var grass = LIBS.generateCircle(0, 0, 1, 100);
+      for (var i = 0; i < grass.vertex.length; i+=6) {
+        grass.vertex[i + 3] = 107/255; // Red component
+        grass.vertex[i + 4] = 142/255; // Green component
+        grass.vertex[i + 5] = 35/255; // Blue component
+      }
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -289,6 +295,7 @@ var GL;
       var ArmLeft_MATRIX = LIBS.get_I4();
       var PUPIL_MATRIX = LIBS.get_I4();
       var BADAN_MATRIX = LIBS.get_I4();
+      var GRASS_MATRIX = LIBS.get_I4();
 
       var headModelMatrix = LIBS.get_I4();
     var legModelMatrix = LIBS.get_I4();
@@ -682,7 +689,7 @@ var GL;
       var ArmLeft = new MyObject(arm.vertices, arm.faces, shader_vertex_source, shader_fragment_source); ArmLeft.setup();
       var RightPupil = new MyObject(rightPupil.vertex, rightPupil.faces, shader_vertex_source, shader_fragment_source); RightPupil.setup();
       var LeftPupil = new MyObject(leftPupil.vertex, leftPupil.faces, shader_vertex_source, shader_fragment_source); LeftPupil.setup();
-      // var Curve = new MyObject(curve.vertex, curve.faces, shader_vertex_source, shader_fragment_source); Curve.setup();
+      var Grass = new MyObject(grass.vertex, grass.faces, shader_vertex_source, shader_fragment_source); Grass.setup();
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
 
@@ -805,6 +812,8 @@ var GL;
         LIBS.rotateX(VIEW_MATRIX, dY*0.01); LIBS.rotateY(VIEW_MATRIX, dX*0.01);
         LIBS.translateX(VIEW_MATRIX, 0); LIBS.translateY(VIEW_MATRIX,0); LIBS.translateZ(VIEW_MATRIX,-10);
 
+        GRASS_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 100, 100, 100);
         if (goBack == false) {
           Igglybuff_position[2] += 0.01;
           if (Igglybuff_position[2] >= 5) {
@@ -937,6 +946,7 @@ var GL;
           ArmLeft.MODEL_MATRIX=ArmLeft_MATRIX; ArmLeft.render(VIEW_MATRIX, PROJECTION_MATRIX);
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
           if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;

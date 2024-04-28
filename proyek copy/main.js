@@ -272,19 +272,19 @@ var GL;
         leftPupil.vertex[i + 5] = 0; // Blue component
       }
 
-      var rightEye = LIBS.generateCircle(0.36, 1, 0.2, 100);
-      for (var i = 0; i < rightEye.vertex.length; i+=6) {
-        rightEye.vertex[i + 3] = 224/255; // Red component
-        rightEye.vertex[i + 4] = 17/255; // Green component
-        rightEye.vertex[i + 5] = 95/255; // Blue component
+      var grass = LIBS.generateCircle(0, 0, 1, 100);
+      for (var i = 0; i < grass.vertex.length; i+=6) {
+        grass.vertex[i + 3] = 107/255; // Red component
+        grass.vertex[i + 4] = 142/255; // Green component
+        grass.vertex[i + 5] = 35/255; // Blue component
       }
 
-      var leftEye = LIBS.generateCircle(-0.36, 1, 0.2, 100);
-      for (var i = 0; i < leftEye.vertex.length; i+=6) {
-        leftEye.vertex[i + 3] = 224/255; // Red component
-        leftEye.vertex[i + 4] = 17/255; // Green component
-        leftEye.vertex[i + 5] = 95/255; // Blue component
-      }
+      var ground = LIBS.HalfSphere(0,0,0,1,100)
+      for (var i = 0; i < ground.vertices.length; i+=6) {
+        ground.vertices[i + 3] = 242/255; // Red component
+        ground.vertices[i + 4] = 212/255; // Green component
+        ground.vertices[i + 5] = 194/255; // Blue component
+      };
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -300,6 +300,7 @@ var GL;
       var PUPIL_MATRIX = LIBS.get_I4();
       var BADAN_MATRIX = LIBS.get_I4();
       var GROUND_MATRIX = LIBS.get_I4();
+      var GRASS_MATRIX = LIBS.get_I4();
 
 
       var trapezoid = [
@@ -659,12 +660,7 @@ var GL;
         3, 4, 7
       ];
 
-      var ground = LIBS.HalfSphere(0,0,0,1,100)
-      for (var i = 0; i < ground.vertices.length; i+=6) {
-        ground.vertices[i + 3] = 242/255; // Red component
-        ground.vertices[i + 4] = 212/255; // Green component
-        ground.vertices[i + 5] = 194/255; // Blue component
-      };
+      
 
 
       var Badan = new MyObject(badan.vertices, badan.faces, shader_vertex_source, shader_fragment_source); Badan.setup();
@@ -678,6 +674,7 @@ var GL;
       var RightPupil = new MyObject(rightPupil.vertex, rightPupil.faces, shader_vertex_source, shader_fragment_source); RightPupil.setup();
       var LeftPupil = new MyObject(leftPupil.vertex, leftPupil.faces, shader_vertex_source, shader_fragment_source); LeftPupil.setup();
       var Ground = new MyObject(ground.vertices, ground.faces, shader_vertex_source, shader_fragment_source); Ground.setup();
+      var Grass = new MyObject(grass.vertex, grass.faces, shader_vertex_source, shader_fragment_source); Grass.setup();
 
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
@@ -801,7 +798,7 @@ var GL;
         }
 
           BADAN_MATRIX = LIBS.get_I4();
-          LIBS.translateY(BADAN_MATRIX, 1); LIBS.translateZ(BADAN_MATRIX, Igglybuff_position[2]);
+          LIBS.translateY(BADAN_MATRIX, -10); LIBS.translateZ(BADAN_MATRIX, Igglybuff_position[2]);
           if (goBack == true) {
             LIBS.rotateY(BADAN_MATRIX, Math.PI/10);
           }
@@ -909,6 +906,9 @@ var GL;
 
           GROUND_MATRIX = LIBS.get_I4();
           LIBS.translateY(GROUND_MATRIX, -12);LIBS.rotateX(GROUND_MATRIX, -Math.PI/2); LIBS.scale(GROUND_MATRIX, 100, 100, 100);
+          
+          GRASS_MATRIX = LIBS.get_I4();
+          LIBS.translateY(GRASS_MATRIX, -11.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 100, 100, 100);
 
           Badan.MODEL_MATRIX=BADAN_MATRIX; Badan.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Acc1.MODEL_MATRIX=ACC1_MATRIX; Acc1.render(VIEW_MATRIX, PROJECTION_MATRIX);
@@ -921,6 +921,7 @@ var GL;
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Ground.MODEL_MATRIX = GROUND_MATRIX; Ground.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Grass.MODEL_MATRIX = GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
 
 
