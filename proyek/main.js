@@ -1,13 +1,3 @@
-var mouseX = 0, mouseY = 0;
-var prevMouseX = 0, prevMouseY = 0;
-var isMouseDown = false;
-
-var keysPressed = {
-    w: false,
-    a: false,
-    s: false,
-    d: false
-}; //copy
 var GL;
 
   class MyObject{
@@ -836,14 +826,14 @@ var GL;
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
           MODEL_MATRIX = LIBS.get_I4();
-        LIBS.translateX(MODEL_MATRIX, -1);
+        LIBS.translateX(MODEL_MATRIX, -7);
 
         object.MODEL_MATRIX = MODEL_MATRIX;
         object.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
         var legModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(legModelMatrix, 3); 
+        LIBS.translateX(legModelMatrix, -3); 
         LIBS.translateY(legModelMatrix, -1); 
 
         legObject.MODEL_MATRIX = legModelMatrix;
@@ -851,7 +841,7 @@ var GL;
 
         var legModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(legModelMatrix2, -5);
+        LIBS.translateX(legModelMatrix2, -11);
         LIBS.translateY(legModelMatrix2, -1);
         // LIBS.rotateX(legModelMatrix2, ALPHA); 
         // LIBS.rotateY(legModelMatrix2, THETA); 
@@ -861,7 +851,7 @@ var GL;
 
         var shoulderModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(shoulderModelMatrix, 4);
+        LIBS.translateX(shoulderModelMatrix, -2);
         LIBS.translateY(shoulderModelMatrix, 2);
         LIBS.rotateZ(shoulderModelMatrix, -1);
 
@@ -870,7 +860,7 @@ var GL;
 
         var shoulderModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(shoulderModelMatrix2, -6);
+        LIBS.translateX(shoulderModelMatrix2, -12);
         LIBS.translateY(shoulderModelMatrix2, 2);
         LIBS.rotateZ(shoulderModelMatrix2, 1);
 
@@ -879,7 +869,7 @@ var GL;
 
         var armModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(armModelMatrix, 5);
+        LIBS.translateX(armModelMatrix, -1);
         LIBS.translateY(armModelMatrix, 3.05);
         LIBS.rotateZ(armModelMatrix, 1);
 
@@ -888,7 +878,7 @@ var GL;
 
         var armModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(armModelMatrix2, -7);
+        LIBS.translateX(armModelMatrix2, -13);
         LIBS.translateY(armModelMatrix2, 3.05);
         LIBS.rotateZ(armModelMatrix2, -1);
 
@@ -897,7 +887,7 @@ var GL;
 
         var handModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(handModelMatrix, 5);
+        LIBS.translateX(handModelMatrix, -1);
         LIBS.translateY(handModelMatrix, 5.3);
 
         handObject.MODEL_MATRIX = handModelMatrix;
@@ -905,7 +895,7 @@ var GL;
 
         var handModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(handModelMatrix2, -7);
+        LIBS.translateX(handModelMatrix2, -13);
         LIBS.translateY(handModelMatrix2, 5.3);
 
         handObject2.MODEL_MATRIX = handModelMatrix2;
@@ -913,7 +903,7 @@ var GL;
 
         var headPieceModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(headPieceModelMatrix, -0.5);
+        LIBS.translateX(headPieceModelMatrix, -6.5);
         LIBS.translateY(headPieceModelMatrix, 3);
 
         headPieceObject.MODEL_MATRIX = headPieceModelMatrix;
@@ -921,7 +911,7 @@ var GL;
 
         var hatModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(hatModelMatrix, -1.2);
+        LIBS.translateX(hatModelMatrix, -7.2);
         LIBS.translateY(hatModelMatrix, 4);
 
         hatObject.MODEL_MATRIX = hatModelMatrix;
@@ -929,7 +919,7 @@ var GL;
 
         var eyeModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(eyeModelMatrix, 0);
+        LIBS.translateX(eyeModelMatrix, -6);
         LIBS.translateY(eyeModelMatrix, 2);
         LIBS.translateZ(eyeModelMatrix, 0.2);
 
@@ -938,7 +928,7 @@ var GL;
 
         var eyeModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(eyeModelMatrix2, -2);
+        LIBS.translateX(eyeModelMatrix2, -8);
         LIBS.translateY(eyeModelMatrix2, 2);
         LIBS.translateZ(eyeModelMatrix2, 0.2);
 
@@ -947,7 +937,7 @@ var GL;
 
         var fingerModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix, 4.5);
+        LIBS.translateX(fingerModelMatrix, -1.5);
         LIBS.translateY(fingerModelMatrix, 6.5);
         
         fingerObject.MODEL_MATRIX = fingerModelMatrix;
@@ -955,7 +945,7 @@ var GL;
 
         var fingerModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix2, 5.6);
+        LIBS.translateX(fingerModelMatrix2, -0.4);
         LIBS.translateY(fingerModelMatrix2, 6.5);
 
         fingerObject2.MODEL_MATRIX = fingerModelMatrix2;
@@ -963,7 +953,7 @@ var GL;
 
         var fingerModelMatrix3 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix3, -6.5);
+        LIBS.translateX(fingerModelMatrix3, -12.5);
         LIBS.translateY(fingerModelMatrix3, 6.5);
 
         fingerObject3.MODEL_MATRIX = fingerModelMatrix3;
@@ -971,7 +961,7 @@ var GL;
 
         var fingerModelMatrix4 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix4, -7.6);
+        LIBS.translateX(fingerModelMatrix4, -13.6);
         LIBS.translateY(fingerModelMatrix4, 6.5);
 
         fingerObject4.MODEL_MATRIX = fingerModelMatrix4;
@@ -979,7 +969,7 @@ var GL;
 
         var thumbModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix, 6.1);
+        LIBS.translateX(thumbModelMatrix, 0.1);
         LIBS.translateY(thumbModelMatrix, 5.3);
         LIBS.rotateZ(thumbModelMatrix, -1.55);
 
@@ -988,7 +978,7 @@ var GL;
 
         var thumbModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix2, -8.1);
+        LIBS.translateX(thumbModelMatrix2, -14.1);
         LIBS.translateY(thumbModelMatrix2, 5.3);
         LIBS.rotateZ(thumbModelMatrix2, 1.55);
 
