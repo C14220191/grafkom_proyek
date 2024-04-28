@@ -292,6 +292,403 @@ var GL;
       var BADAN_MATRIX = LIBS.get_I4();
 
 
+      var trapezoid = [
+        -5.5,0,-1, 0, 0, 0, 
+        5.5,0,-1, 0, 0, 0, 
+        5.5,0, 1, 0, 0, 0, 
+        -5.5,0, 1, 0, 0, 0, 
+        // Top
+        -4, 3, -1, 1, 0, 0, 
+        4, 3, -1, 0, 1, 0, 
+        4, 3, 1, 0, 0, 1, 
+        -4, 3, 1, 1, 1, 1
+    ]
+   
+      // FACES:
+      var trapezoid_faces = [
+        0, 1, 2,
+        0, 2, 3,
+        // Top
+        4, 5, 6,
+        4, 6, 7,
+        // Side faces
+        0, 1, 5,
+        0, 5, 4,
+        1, 2, 6,
+        1, 6, 5,
+        2, 3, 7,
+        2, 7, 6,
+        3, 0, 4,
+        3, 4, 7
+      ];
+
+    var legVertices = [
+      //belakang
+      -2.5,-8,-2, 1,1,0, 
+      2.5,-8,-2, 1,1,0, 
+      1.5,1,-1, 1,1,0, 
+      -1.5,1,-1, 1,1,0, 
+
+
+      //depan
+      -2.5,-8,2, 0,0, 1,
+      2.5,-8,2, 0,0, 1,
+      1.5,1,1, 0,0, 1,
+      -1.5,1,1, 0,0, 1,
+
+
+      //kiri
+      -2.5,-8,-2, 0,1,1, 
+      -1.5,1,-1, 0,1,1, 
+      -1.5,1,1, 0,1,1, 
+      -2.5,-8,2, 0,1,1, 
+
+      //kanan
+      2.5,-8,-2, 1,0,0, 
+      1.5,1.,-1, 1,0,0, 
+      1.5,1.,1, 1,0,0, 
+      2.5,-8,2, 1,0,0, 
+
+
+      //bawah
+      -2.5,-8,-2, 1,0,1, 
+      -2.5,-8,2, 1,0,1, 
+      2.5,-8,2, 1,0,1, 
+      2.5,-8,-2, 1,0,1, 
+
+
+      //atas
+      -1.5,1,-1, 0,1,0, 
+      -1.5,1,1, 0,1,0, 
+      1.5,1,1, 0,1,0, 
+      1.5,1,-1, 0,1,0
+    ];
+
+    var legFaces = [
+      0, 1, 2,
+      0, 2, 3,
+
+
+      4, 5, 6,
+      4, 6, 7,
+
+
+      8, 9, 10,
+      8, 10, 11,
+
+
+      12, 13, 14,
+      12, 14, 15,
+
+
+      16, 17, 18,
+      16, 18, 19,
+
+
+      20, 21, 22,
+      20, 22, 23
+    ];
+
+    var shoulderVertices = [
+       //belakang
+      -0.5,-0.5,-0.5,   1,1,0, 
+      0.5,-0.5,-0.5,     1,1,0, 
+      0.5,0.5,-0.5,     1,1,0, 
+      -0.5,0.5,-0.5,    1,1,0, 
+
+
+      //depan
+      -0.5,-0.5,0.5,    0,0,1, 
+      0.5,-0.5,0.5,     0,0,1, 
+      0.5,0.5,0.5,      0,0,1, 
+      -0.5,0.5,0.5,     0,0,1, 
+
+
+      //kiri
+      -0.5,-0.5,-0.5,   0,1,1,
+      -0.5,0.5,-0.5,    0,1,1, 
+      -0.5,0.5,0.5,     0,1,1, 
+      -0.5,-0.5,0.5,    0,1,1, 
+      
+      //kanan
+      0.5,-0.5,-0.5,    1,0,0, 
+      0.5,0.5,-0.5,     1,0,0, 
+      0.5,0.5,0.5,      1,0,0, 
+      0.5,-0.5,0.5,     1,0,0, 
+
+
+      //bawah
+      -0.5,-0.5,-0.5,   1,0,1, 
+      -0.5,-0.5,0.5,    1,0,1, 
+      0.5,-0.5,0.5,     1,0,1, 
+      0.5,-0.5,-0.5,    1,0,1, 
+
+
+      //atas
+      -0.5,0.5,-0.5,    0,1,0, 
+      -0.5,0.5,0.5,     0,1,0, 
+      0.5,0.5,0.5,      0,1,0, 
+      0.5,0.5,-0.5,     0,1,0
+    ];
+
+    var shoulderFaces = [
+      0,1,2,
+      0,2,3,
+
+
+      4,5,6,
+      4,6,7,
+
+
+      8,9,10,
+      8,10,11,
+
+
+      12,13,14,
+      12,14,15,
+
+
+      16,17,18,
+      16,18,19,
+
+
+      20,21,22,
+      20,22,23
+    ];
+
+    var armVertices = [
+      //belakang
+      -0.75,-0.75,-0.75,   1,1,0, 
+      0.75,-0.75,-0.75,     1,1,0, 
+      0.75,0.75,-0.75,     1,1,0, 
+      -0.75,0.75,-0.75,    1,1,0,
+
+
+      //depan
+      -0.75,-0.75,0.75,    0,0,1, 
+      0.75,-0.75,0.75,     0,0,1, 
+      0.75,0.75,0.75,      0,0,1, 
+      -0.75,0.75,0.75,     0,0,1, 
+
+
+      //kiri
+      -0.75,-0.75,-0.75,   0,1,1, 
+      -0.75,0.75,-0.75,    0,1,1, 
+      -0.75,0.75,0.75,     0,1,1, 
+      -0.75,-0.75,0.75,    0,1,1, 
+      
+      //kanan
+      0.75,-0.75,-0.75,    1,0,0, 
+      0.75,0.75,-0.75,     1,0,0, 
+      0.75,0.75,0.75,      1,0,0, 
+      0.75,-0.75,0.75,     1,0,0, 
+
+
+      //bawah
+      -0.75,-0.75,-0.75,   1,0,1, 
+      -0.75,-0.75,0.75,    1,0,1, 
+      0.75,-0.75,0.75,     1,0,1, 
+      0.75,-0.75,-0.75,    1,0,1, 
+
+
+      //atas
+      -0.75,0.75,-0.75,    0,1,0, 
+      -0.75,0.75,0.75,     0,1,0, 
+      0.75,0.75,0.75,      0,1,0, 
+      0.75,0.75,-0.75,     0,1,0
+    ]
+   
+      // FACES:
+      var armFaces = [
+        0,1,2,
+        0,2,3,
+
+
+        4,5,6,
+        4,6,7,
+
+
+        8,9,10,
+        8,10,11,
+
+
+        12,13,14,
+        12,14,15,
+
+
+        16,17,18,
+        16,18,19,
+
+
+        20,21,22,
+        20,22,23
+      ];  
+
+      var handVertices = [
+        -1.2,-1.2,-1.2,   1,1,0, 
+        1.2,-1.2,-1.2,     1,1,0, 
+        1.2,1.2,-1.2,     1,1,0, 
+        -1.2,1.2,-1.2,    1,1,0, 
+  
+  
+        //depan
+        -1.2,-1.2,1.2,    0,0,1, 
+        1.2,-1.2,1.2,     0,0,1, 
+        1.2,1.2,1.2,      0,0,1, 
+        -1.2,1.2,1.2,     0,0,1, 
+  
+  
+        //kiri
+        -1.2,-1.2,-1.2,   0,1,1, 
+        -1.2,1.2,-1.2,    0,1,1, 
+        -1.2,1.2,1.2,     0,1,1, 
+        -1.2,-1.2,1.2,    0,1,1, 
+        
+        //kanan
+        1.2,-1.2,-1.2,    1,0,0, 
+        1.2,1.2,-1.2,     1,0,0, 
+        1.2,1.2,1.2,      1,0,0, 
+        1.2,-1.2,1.2,     1,0,0, 
+  
+  
+        //bawah
+        -1.2,-1.2,-1.2,   1,0,1, 
+        -1.2,-1.2,1.2,    1,0,1, 
+        1.2,-1.2,1.2,     1,0,1, 
+        1.2,-1.2,-1.2,    1,0,1,
+  
+  
+        //atas
+        -1.2,1.2,-1.2,    0,1,0, 
+        -1.2,1.2,1.2,     0,1,0, 
+        1.2,1.2,1.2,      0,1,0, 
+        1.2,1.2,-1.2,     0,1,0
+    ]
+   
+      // FACES:
+      var handFaces = [
+        0,1,2,
+        0,2,3,
+
+
+        4,5,6,
+        4,6,7,
+
+
+        8,9,10,
+        8,10,11,
+
+
+        12,13,14,
+        12,14,15,
+
+
+        16,17,18,
+        16,18,19,
+
+
+        20,21,22,
+        20,22,23
+      ];
+
+      var headPiece = [
+        -2,0,-1, 1, 0, 0,  
+        1,0,-1, 0, 1, 0, 
+        1,0, 1, 0, 0, 1, 
+        -2,0, 1, 1, 1, 1, 
+        // Top
+        -2, 1, -1, 1, 0, 0, 
+        1, 1, -1, 0, 1, 0, 
+        1, 1, 1, 0, 0, 1,  
+        -2, 1, 1, 1, 1, 1 
+      ];
+
+      var headPieceFaces = [
+        0, 1, 2,
+        0, 2, 3,
+        // Top
+        4, 5, 6,
+        4, 6, 7,
+        // Side faces
+        0, 1, 5,
+        0, 5, 4,
+        1, 2, 6,
+        1, 6, 5,
+        2, 3, 7,
+        2, 7, 6,
+        3, 0, 4,
+        3, 4, 7
+      ];
+
+      var hatVertices = [
+        -0.5,0,-1, 1, 0, 0, 
+        1,0,-1, 0, 1, 0,  
+        1,0, 1, 0, 0, 1,  
+        -0.5,0, 1, 1, 1, 1,  
+        // Top
+        -0.5, 1, -1, 1, 0, 0, 
+        1, 1, -1, 0, 1, 0,  
+        1, 1, 1, 0, 0, 1,  
+        -0.5, 1, 1, 1, 1, 1 
+      ];
+
+      var hatFaces = [
+        0, 1, 2,
+        0, 2, 3,
+        // Top
+        4, 5, 6,
+        4, 6, 7,
+        // Side faces
+        0, 1, 5,
+        0, 5, 4,
+        1, 2, 6,
+        1, 6, 5,
+        2, 3, 7,
+        2, 7, 6,
+        3, 0, 4,
+        3, 4, 7
+      ];
+
+      var fingerVertices = [
+        -0.5, 0, -0.5, 1,1,0,  
+        0.5, 0, -0.5,  1,1,0, 
+        0.5, 0, 0.5,    1,1,0,
+        -0.5, 0, 0.5,   1,1,0,
+        // Apex vertex
+        0, 1, 0,      1,1,0
+      ]
+
+      var fingerFaces = [
+
+        0, 1, 4, 
+        1, 2, 4, 
+        2, 3, 4, 
+        3, 0, 4, 
+        // Side triangles
+        0, 1, 2,
+        0, 2, 3 
+    ]
+
+    var thumbVertices = [
+      -0.75, 0, -0.75, 1,1,0,  
+      0.75, 0, -0.75,  1,1,0, 
+      0.75, 0, 0.75,    1,1,0,
+      -0.75, 0, 0.75,   1,1,0,
+      // Apex vertex
+      0, 1.5, 0,      1,1,0
+    ]
+
+    var thumbFaces = [
+      0, 1, 4, 
+      1, 2, 4, 
+      2, 3, 4, 
+      3, 0, 4, 
+      // Side triangles
+      0, 1, 2, 
+      0, 2, 3  
+    ]
+
+
       LIBS.translateZ(VIEW_MATRIX,-10);
 
 
@@ -306,6 +703,52 @@ var GL;
       var RightPupil = new MyObject(rightPupil.vertex, rightPupil.faces, shader_vertex_source, shader_fragment_source); RightPupil.setup();
       var LeftPupil = new MyObject(leftPupil.vertex, leftPupil.faces, shader_vertex_source, shader_fragment_source); LeftPupil.setup();
       // var Curve = new MyObject(curve.vertex, curve.faces, shader_vertex_source, shader_fragment_source); Curve.setup();
+
+    var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
+
+    var legObject = new MyObject(legVertices, legFaces, shader_vertex_source, shader_fragment_source);legObject.setup();
+    var legObject2 = new MyObject(legVertices, legFaces, shader_vertex_source, shader_fragment_source);legObject2.setup();
+    legObject.child.push(legObject2);
+
+    var shoulderObject = new MyObject(shoulderVertices, shoulderFaces, shader_vertex_source, shader_fragment_source);shoulderObject.setup();
+    var shoulderObject2 = new MyObject(shoulderVertices, shoulderFaces, shader_vertex_source, shader_fragment_source);shoulderObject2.setup();
+    shoulderObject.child.push(shoulderObject2);
+
+    var armObject = new MyObject(armVertices, armFaces, shader_vertex_source, shader_fragment_source);armObject.setup();
+    var armObject2 = new MyObject(armVertices, armFaces, shader_vertex_source, shader_fragment_source);armObject2.setup();
+
+    armObject.child.push(armObject2);
+
+    var handObject = new MyObject(handVertices, handFaces, shader_vertex_source, shader_fragment_source);handObject.setup();
+    var handObject2 = new MyObject(handVertices, handFaces, shader_vertex_source, shader_fragment_source);handObject2.setup();
+
+    handObject.child.push(handObject2);
+
+    var eyeData = LIBS.Sphere(0,0,0.5,0.5,100);
+
+    var eyeObject = new MyObject(eyeData.vertices, eyeData.faces, shader_vertex_source, shader_fragment_source);eyeObject.setup();
+    var eyeObject2 = new MyObject(eyeData.vertices, eyeData.faces, shader_vertex_source, shader_fragment_source);eyeObject2.setup();
+
+    eyeObject.child.push(eyeObject2);
+
+    var headPieceObject = new MyObject(headPiece, headPieceFaces, shader_vertex_source, shader_fragment_source);headPieceObject.setup();
+
+    var hatObject = new MyObject(hatVertices, hatFaces, shader_vertex_source, shader_fragment_source);hatObject.setup();;
+
+    var fingerObject = new MyObject(fingerVertices, fingerFaces, shader_vertex_source, shader_fragment_source);fingerObject.setup();
+    var fingerObject2 = new MyObject(fingerVertices, fingerFaces, shader_vertex_source, shader_fragment_source);fingerObject2.setup();
+    var fingerObject3 = new MyObject(fingerVertices, fingerFaces, shader_vertex_source, shader_fragment_source);fingerObject3.setup();
+    var fingerObject4 = new MyObject(fingerVertices, fingerFaces, shader_vertex_source, shader_fragment_source);fingerObject4.setup();
+
+    fingerObject.child.push(fingerObject2);
+    fingerObject.child.push(fingerObject3);
+    fingerObject.child.push(fingerObject4);
+
+    var thumbObject = new MyObject(thumbVertices, thumbFaces, shader_vertex_source, shader_fragment_source);thumbObject.setup();
+    var thumbObject2 = new MyObject(thumbVertices, thumbFaces, shader_vertex_source, shader_fragment_source);thumbObject2.setup();
+
+    thumbObject.child.push(thumbObject2);
+
       /*========================= DRAWING ========================= */
       GL.clearColor(0.0, 0.0, 0.0, 0.0);
 
@@ -402,6 +845,166 @@ var GL;
           ArmLeft.MODEL_MATRIX=ArmLeft_MATRIX; ArmLeft.render(VIEW_MATRIX, PROJECTION_MATRIX);
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+          MODEL_MATRIX = LIBS.get_I4();
+        LIBS.translateX(MODEL_MATRIX, -1);
+
+        object.MODEL_MATRIX = MODEL_MATRIX;
+        object.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var legModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(legModelMatrix, 3); 
+        LIBS.translateY(legModelMatrix, -1); 
+
+        legObject.MODEL_MATRIX = legModelMatrix;
+        legObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var legModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(legModelMatrix2, -5);
+        LIBS.translateY(legModelMatrix2, -1);
+        // LIBS.rotateX(legModelMatrix2, ALPHA); 
+        // LIBS.rotateY(legModelMatrix2, THETA); 
+
+        legObject2.MODEL_MATRIX = legModelMatrix2;
+        legObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var shoulderModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(shoulderModelMatrix, 4);
+        LIBS.translateY(shoulderModelMatrix, 2);
+        LIBS.rotateZ(shoulderModelMatrix, -1);
+
+        shoulderObject.MODEL_MATRIX = shoulderModelMatrix;
+        shoulderObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var shoulderModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(shoulderModelMatrix2, -6);
+        LIBS.translateY(shoulderModelMatrix2, 2);
+        LIBS.rotateZ(shoulderModelMatrix2, 1);
+
+        shoulderObject2.MODEL_MATRIX = shoulderModelMatrix2;
+        shoulderObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var armModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(armModelMatrix, 5);
+        LIBS.translateY(armModelMatrix, 3.05);
+        LIBS.rotateZ(armModelMatrix, 1);
+
+        armObject.MODEL_MATRIX = armModelMatrix;
+        armObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var armModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(armModelMatrix2, -7);
+        LIBS.translateY(armModelMatrix2, 3.05);
+        LIBS.rotateZ(armModelMatrix2, -1);
+
+        armObject2.MODEL_MATRIX = armModelMatrix2;
+        armObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var handModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(handModelMatrix, 5);
+        LIBS.translateY(handModelMatrix, 5.3);
+
+        handObject.MODEL_MATRIX = handModelMatrix;
+        handObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var handModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(handModelMatrix2, -7);
+        LIBS.translateY(handModelMatrix2, 5.3);
+
+        handObject2.MODEL_MATRIX = handModelMatrix2;
+        handObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var headPieceModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(headPieceModelMatrix, -0.5);
+        LIBS.translateY(headPieceModelMatrix, 3);
+
+        headPieceObject.MODEL_MATRIX = headPieceModelMatrix;
+        headPieceObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var hatModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(hatModelMatrix, -1.2);
+        LIBS.translateY(hatModelMatrix, 4);
+
+        hatObject.MODEL_MATRIX = hatModelMatrix;
+        hatObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var eyeModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(eyeModelMatrix, 0);
+        LIBS.translateY(eyeModelMatrix, 2);
+        LIBS.translateZ(eyeModelMatrix, 0.2);
+
+        eyeObject.MODEL_MATRIX = eyeModelMatrix;
+        eyeObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var eyeModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(eyeModelMatrix2, -2);
+        LIBS.translateY(eyeModelMatrix2, 2);
+        LIBS.translateZ(eyeModelMatrix2, 0.2);
+
+        eyeObject2.MODEL_MATRIX = eyeModelMatrix2;
+        eyeObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var fingerModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(fingerModelMatrix, 4.5);
+        LIBS.translateY(fingerModelMatrix, 6.5);
+        
+        fingerObject.MODEL_MATRIX = fingerModelMatrix;
+        fingerObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var fingerModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(fingerModelMatrix2, 5.6);
+        LIBS.translateY(fingerModelMatrix2, 6.5);
+
+        fingerObject2.MODEL_MATRIX = fingerModelMatrix2;
+        fingerObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var fingerModelMatrix3 = LIBS.get_I4();
+
+        LIBS.translateX(fingerModelMatrix3, -6.5);
+        LIBS.translateY(fingerModelMatrix3, 6.5);
+
+        fingerObject3.MODEL_MATRIX = fingerModelMatrix3;
+        fingerObject3.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var fingerModelMatrix4 = LIBS.get_I4();
+
+        LIBS.translateX(fingerModelMatrix4, -7.6);
+        LIBS.translateY(fingerModelMatrix4, 6.5);
+
+        fingerObject4.MODEL_MATRIX = fingerModelMatrix4;
+        fingerObject4.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var thumbModelMatrix = LIBS.get_I4();
+
+        LIBS.translateX(thumbModelMatrix, 6.1);
+        LIBS.translateY(thumbModelMatrix, 5.5);
+        LIBS.rotateZ(thumbModelMatrix, -1.55);
+
+        thumbObject.MODEL_MATRIX = thumbModelMatrix;
+        thumbObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
+        var thumbModelMatrix2 = LIBS.get_I4();
+
+        LIBS.translateX(thumbModelMatrix2, -8.1);
+        LIBS.translateY(thumbModelMatrix2, 5.5);
+        LIBS.rotateZ(thumbModelMatrix2, 1.55);
+
+        thumbObject2.MODEL_MATRIX = thumbModelMatrix2;
+        thumbObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
           // Curve.MODEL_MATRIX=MODEL_MATRIX10; Curve.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
          
