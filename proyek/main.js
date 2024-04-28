@@ -951,8 +951,8 @@ var GL;
           }
 
         headModelMatrix = LIBS.get_I4();
-        LIBS.translateX(headModelMatrix, -7);
-        LIBS.translateY(headModelMatrix, 8);
+        LIBS.translateX(headModelMatrix, -8);
+        LIBS.translateY(headModelMatrix, 9);
         LIBS.translateZ(headModelMatrix, Stonjourner_position[2]);
         if (goBack2 == true) {
           LIBS.rotateY(BADAN_MATRIX, Math.PI/10);
@@ -974,8 +974,8 @@ var GL;
           }
         }
 
-        LIBS.translateX(legModelMatrix, -3); 
-        LIBS.translateY(legModelMatrix, 7); 
+        LIBS.translateX(legModelMatrix, -4); 
+        LIBS.translateY(legModelMatrix, 8); 
         LIBS.translateZ(legModelMatrix, Stonjourner_position[2]);
         LIBS.rotateX(legModelMatrix, StonLegRightRotate);
 
@@ -996,8 +996,8 @@ var GL;
           }
         }
         
-        LIBS.translateX(legModelMatrix2, -11);
-        LIBS.translateY(legModelMatrix2, 7);
+        LIBS.translateX(legModelMatrix2, -12);
+        LIBS.translateY(legModelMatrix2, 8);
         LIBS.translateZ(legModelMatrix2, Stonjourner_position[2]);
         LIBS.rotateX(legModelMatrix2, StonLegLeftRotate);
 
@@ -1006,8 +1006,8 @@ var GL;
 
         shoulderModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(shoulderModelMatrix, -2);
-        LIBS.translateY(shoulderModelMatrix, 10);
+        LIBS.translateX(shoulderModelMatrix, -3);
+        LIBS.translateY(shoulderModelMatrix, 11);
         LIBS.translateZ(shoulderModelMatrix, Stonjourner_position[2]);
         LIBS.rotateZ(shoulderModelMatrix, -1);
 
@@ -1016,8 +1016,8 @@ var GL;
 
         shoulderModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(shoulderModelMatrix2, -12);
-        LIBS.translateY(shoulderModelMatrix2, 10);
+        LIBS.translateX(shoulderModelMatrix2, -13);
+        LIBS.translateY(shoulderModelMatrix2, 11);
         LIBS.translateZ(shoulderModelMatrix2, Stonjourner_position[2]);
         LIBS.rotateZ(shoulderModelMatrix2, 1);
 
@@ -1026,8 +1026,8 @@ var GL;
 
         armModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(armModelMatrix, -1);
-        LIBS.translateY(armModelMatrix, 11.05);
+        LIBS.translateX(armModelMatrix, -2);
+        LIBS.translateY(armModelMatrix, 12.05);
         LIBS.translateZ(armModelMatrix, Stonjourner_position[2]);
         LIBS.rotateZ(armModelMatrix, 1);
 
@@ -1036,8 +1036,8 @@ var GL;
 
         armModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(armModelMatrix2, -13);
-        LIBS.translateY(armModelMatrix2, 11.05);
+        LIBS.translateX(armModelMatrix2, -14);
+        LIBS.translateY(armModelMatrix2, 12.05);
         LIBS.translateZ(armModelMatrix2, Stonjourner_position[2]);
         LIBS.rotateZ(armModelMatrix2, -1);
 
@@ -1046,8 +1046,8 @@ var GL;
 
         handModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(handModelMatrix, -1);
-        LIBS.translateY(handModelMatrix, 13.3);
+        LIBS.translateX(handModelMatrix, -2);
+        LIBS.translateY(handModelMatrix, 14.3);
         LIBS.translateZ(handModelMatrix, Stonjourner_position[2]);
 
         handObject.MODEL_MATRIX = handModelMatrix;
@@ -1055,8 +1055,8 @@ var GL;
 
         handModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(handModelMatrix2, -13);
-        LIBS.translateY(handModelMatrix2, 13.3);
+        LIBS.translateX(handModelMatrix2, -14);
+        LIBS.translateY(handModelMatrix2, 14.3);
         LIBS.translateZ(handModelMatrix2, Stonjourner_position[2]);
 
         handObject2.MODEL_MATRIX = handModelMatrix2;
@@ -1064,8 +1064,8 @@ var GL;
 
         headPieceModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(headPieceModelMatrix, -6.5);
-        LIBS.translateY(headPieceModelMatrix, 11);
+        LIBS.translateX(headPieceModelMatrix, -7.5);
+        LIBS.translateY(headPieceModelMatrix, 12);
         LIBS.translateZ(headPieceModelMatrix, Stonjourner_position[2]);
 
         headPieceObject.MODEL_MATRIX = headPieceModelMatrix;
@@ -1073,8 +1073,8 @@ var GL;
 
         hatModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(hatModelMatrix, -7.2);
-        LIBS.translateY(hatModelMatrix, 12);
+        LIBS.translateX(hatModelMatrix, -8.2);
+        LIBS.translateY(hatModelMatrix, 13);
         LIBS.translateZ(hatModelMatrix, Stonjourner_position[2]);
 
         hatObject.MODEL_MATRIX = hatModelMatrix;
@@ -1082,8 +1082,8 @@ var GL;
 
         eyeModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(eyeModelMatrix, -6);
-        LIBS.translateY(eyeModelMatrix, 10);
+        LIBS.translateX(eyeModelMatrix, -7);
+        LIBS.translateY(eyeModelMatrix, 11);
         LIBS.translateZ(eyeModelMatrix, 0.2+Stonjourner_position[2]);
         if (goBack2 == true) {
           LIBS.translateZ(eyeModelMatrix, -1.5);
@@ -1095,8 +1095,8 @@ var GL;
 
         eyeModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(eyeModelMatrix2, -8);
-        LIBS.translateY(eyeModelMatrix2, 10);
+        LIBS.translateX(eyeModelMatrix2, -9);
+        LIBS.translateY(eyeModelMatrix2, 11);
         LIBS.translateZ(eyeModelMatrix2, 0.2+Stonjourner_position[2]);
         if (goBack2 == true) {
           LIBS.translateZ(eyeModelMatrix2, -1.5);
@@ -1119,8 +1119,8 @@ var GL;
           }
         }
 
-        LIBS.translateX(fingerModelMatrix, -1.5);
-        LIBS.translateY(fingerModelMatrix, 14.5);
+        LIBS.translateX(fingerModelMatrix, -2.5);
+        LIBS.translateY(fingerModelMatrix, 15.5);
         LIBS.translateZ(fingerModelMatrix, Stonjourner_position[2]);
         
         fingerObject.MODEL_MATRIX = fingerModelMatrix;
@@ -1128,8 +1128,8 @@ var GL;
 
         fingerModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix2, -0.4);
-        LIBS.translateY(fingerModelMatrix2, 14.5);
+        LIBS.translateX(fingerModelMatrix2, -1.4);
+        LIBS.translateY(fingerModelMatrix2, 15.5);
         LIBS.translateZ(fingerModelMatrix2, Stonjourner_position[2]);
 
         fingerObject2.MODEL_MATRIX = fingerModelMatrix2;
@@ -1137,8 +1137,8 @@ var GL;
 
         fingerModelMatrix3 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix3, -12.5);
-        LIBS.translateY(fingerModelMatrix3, 14.5);
+        LIBS.translateX(fingerModelMatrix3, -13.5);
+        LIBS.translateY(fingerModelMatrix3, 15.5);
         LIBS.translateZ(fingerModelMatrix3, Stonjourner_position[2]);
 
         fingerObject3.MODEL_MATRIX = fingerModelMatrix3;
@@ -1146,8 +1146,8 @@ var GL;
 
         fingerModelMatrix4 = LIBS.get_I4();
 
-        LIBS.translateX(fingerModelMatrix4, -13.6);
-        LIBS.translateY(fingerModelMatrix4, 14.5);
+        LIBS.translateX(fingerModelMatrix4, -14.6);
+        LIBS.translateY(fingerModelMatrix4, 15.5);
         LIBS.translateZ(fingerModelMatrix4, Stonjourner_position[2]);
 
         fingerObject4.MODEL_MATRIX = fingerModelMatrix4;
@@ -1155,8 +1155,8 @@ var GL;
 
         thumbModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix, 0.1);
-        LIBS.translateY(thumbModelMatrix, 13.3);
+        LIBS.translateX(thumbModelMatrix, -0.9);
+        LIBS.translateY(thumbModelMatrix, 14.3);
         LIBS.translateZ(thumbModelMatrix, Stonjourner_position[2]);
         LIBS.rotateZ(thumbModelMatrix, -1.55);
 
@@ -1165,8 +1165,8 @@ var GL;
 
         thumbModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix2, -14.1);
-        LIBS.translateY(thumbModelMatrix2, 13.3);
+        LIBS.translateX(thumbModelMatrix2, -15.1);
+        LIBS.translateY(thumbModelMatrix2, 14.3);
         LIBS.translateZ(thumbModelMatrix2, Stonjourner_position[2]);
         LIBS.rotateZ(thumbModelMatrix2, 1.55);
 
