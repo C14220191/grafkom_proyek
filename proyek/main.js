@@ -746,9 +746,12 @@ var GL;
       var rotatepeed = 0.01;
 
       var Stonjourner_position = [0,0,0];
+      var goBack2 = false;
       var StonLegswitch = true;
       var StonLegLeftRotate = 0;
       var StonLegRightRotate = 0;
+      var rotate1Ston = false;
+      var rotate2Ston = true;
 
 
       var time_prev = 0;
@@ -909,22 +912,22 @@ var GL;
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
-          if (goBack == false) {
+          if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;
             if (Stonjourner_position[2] >= 5) {
-              goBack = true;
+              goBack2 = true;
             } 
           }else {
             Stonjourner_position[2] -= 0.1;
             if (Stonjourner_position[2] <= -5) {
-              goBack = false;
+              goBack2 = false;
             }
           }
 
         var headModelMatrix = LIBS.get_I4();
         LIBS.translateX(headModelMatrix, -7);
         LIBS.translateZ(headModelMatrix, Stonjourner_position[2]);
-        if (goBack == true) {
+        if (goBack2 == true) {
           LIBS.rotateY(BADAN_MATRIX, Math.PI/10);
         }
 
@@ -1031,7 +1034,7 @@ var GL;
         LIBS.translateX(eyeModelMatrix, -6);
         LIBS.translateY(eyeModelMatrix, 2);
         LIBS.translateZ(eyeModelMatrix, 0.2+Stonjourner_position[2]);
-        if (goBack == true) {
+        if (goBack2 == true) {
           LIBS.translateZ(eyeModelMatrix, -1.5);
 
         }
@@ -1044,7 +1047,7 @@ var GL;
         LIBS.translateX(eyeModelMatrix2, -8);
         LIBS.translateY(eyeModelMatrix2, 2);
         LIBS.translateZ(eyeModelMatrix2, 0.2+Stonjourner_position[2]);
-        if (goBack == true) {
+        if (goBack2 == true) {
           LIBS.translateZ(eyeModelMatrix2, -1.5);
 
         }
@@ -1118,19 +1121,19 @@ var GL;
           temp = LIBS.get_I4();
           LIBS.translateZ(temp, -Stonjourner_position[2]);
 
-          if (rotate1 == true) {
+          if (rotate1Ston == true) {
             StonLegLeftRotate -= rotatepeed;
             if(StonLegLeftRotate <= -0.35){
-              rotate1 = false;
+              rotate1Ston = false;
             }
           }
           else {
             StonLegLeftRotate += rotatepeed;
             if(StonLegLeftRotate >= 0.35){
-              rotate1 = true;
+              rotate1Ston = true;
             }
           }
-          if (goBack == true) {
+          if (goBack2 == true) {
             LIBS.rotateY(legModelMatrix, Math.PI/10);
           }
           if (StonLegswitch == true) {
@@ -1162,16 +1165,16 @@ var GL;
           temp = LIBS.get_I4();
           LIBS.translateZ(temp, -Stonjourner_position[2]);
 
-          if (rotate2 == true) {
+          if (rotate2Ston == true) {
             StonLegRightRotate -= rotatepeed;
             if(StonLegRightRotate <= -0.35){
-              rotate2 = false;
+              rotate2Ston = false;
             }
           }
           else {
             StonLegRightRotate += rotatepeed;
             if(StonLegRightRotate >= 0.35){
-              rotate2 = true;
+              rotate2Ston = true;
             }
           }
 
