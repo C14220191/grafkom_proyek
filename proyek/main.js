@@ -808,7 +808,7 @@ var GL;
         
         LIBS.translateX(VIEW_MATRIX, pos_x); LIBS.translateY(VIEW_MATRIX, pos_y); LIBS.translateZ(VIEW_MATRIX, pos_z);
         
-        LIBS.setPosition(VIEW_MATRIX,0,0,-20)
+        LIBS.setPosition(VIEW_MATRIX,0,0,-50)
         LIBS.rotateX(VIEW_MATRIX, dY*0.01); LIBS.rotateY(VIEW_MATRIX, dX*0.01);
         LIBS.translateX(VIEW_MATRIX, 0); LIBS.translateY(VIEW_MATRIX,0); LIBS.translateZ(VIEW_MATRIX,-10);
 
@@ -816,12 +816,12 @@ var GL;
         LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 100, 100, 100);
         if (goBack == false) {
           Igglybuff_position[2] += 0.01;
-          if (Igglybuff_position[2] >= 5) {
+          if (Igglybuff_position[2] >= 10) {
             goBack = true;
           } 
         }else {
           Igglybuff_position[2] -= 0.01;
-          if (Igglybuff_position[2] <= -5) {
+          if (Igglybuff_position[2] <= -10) {
             goBack = false;
           }
         }
