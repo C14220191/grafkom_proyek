@@ -102,17 +102,6 @@ var LIBS = {
     };
   },
 
-  Circle: function(x,y,rad){
-    var list = []
-    for(var i=0;i<360;i++){
-      var a = rad*Math.cos((i/180)*Math.PI) + x;
-      var b = rad*Math.sin((i/180)*Math.PI) + y;
-      list.push(a);
-      list.push(b);
-    }
-    return list;
-  },
-
   EllipsoidX: function(x, y, z, radius, segments) {
     var vertices = [];
     var colors = [];
@@ -492,7 +481,6 @@ var LIBS = {
   
     return { vertex, faces };
   },
-
 
   get_projection: function(angle, a, zMin, zMax) {
 
