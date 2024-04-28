@@ -748,6 +748,12 @@ var GL;
 
       var Igglybuff_position = [0,0,0];
       var goBack = false;
+      var igglyLegswitch = true;
+      var igglyLegLeftRotate = 0;
+      var igglyLegRightRotate = 0;
+      var rotate1 = false;
+      var rotate2 = true;
+      var rotatepeed = 0.01;
 
       var time_prev = 0;
       var animate = function(time) {
@@ -777,18 +783,21 @@ var GL;
 
         if (goBack == false) {
           Igglybuff_position[2] += 0.01;
-          if (Igglybuff_position[2] >= 10) {
+          if (Igglybuff_position[2] >= 5) {
             goBack = true;
           } 
         }else {
           Igglybuff_position[2] -= 0.01;
-          if (Igglybuff_position[2] <= -10) {
+          if (Igglybuff_position[2] <= -5) {
             goBack = false;
           }
         }
 
           BADAN_MATRIX = LIBS.get_I4();
           LIBS.translateY(BADAN_MATRIX, 1); LIBS.translateZ(BADAN_MATRIX, Igglybuff_position[2]);
+          if (goBack == true) {
+            LIBS.rotateY(BADAN_MATRIX, Math.PI/10);
+          }
 
 
           ACC1_MATRIX = LIBS.get_I4();  
@@ -818,10 +827,79 @@ var GL;
 
           PUPIL_MATRIX = LIBS.get_I4();
           LIBS.translateZ(PUPIL_MATRIX,0.988+Igglybuff_position[2] )
-          LIBS.translateY(PUPIL_MATRIX, -0.2);
+          LIBS.translateY(PUPIL_MATRIX, -0.1);
+          if (goBack == true) {
+            LIBS.translateZ(PUPIL_MATRIX, -2);
 
-          MODEL_MATRIX10 = LIBS.get_I4();
+          }
 
+          //putar pada sumbu
+
+          temp = LIBS.get_I4();
+          LIBS.translateX(temp, -Igglybuff_position[0]);
+          LegLeft_MATRIX = LIBS.multiply(LegLeft_MATRIX, temp);
+          temp = LIBS.get_I4();
+          LIBS.translateY(temp, -Igglybuff_position[1]);
+          LegLeft_MATRIX = LIBS.multiply(LegLeft_MATRIX, temp);
+          temp = LIBS.get_I4();
+          LIBS.translateZ(temp, -Igglybuff_position[2]);
+
+          if (rotate1 == true) {
+            igglyLegLeftRotate -= rotatepeed;
+            if(igglyLegLeftRotate <= -0.35){
+              rotate1 = false;
+            }
+          }
+          else {
+            igglyLegLeftRotate += rotatepeed;
+            if(igglyLegLeftRotate >= 0.35){
+              rotate1 = true;
+            }
+          }
+          if (goBack == true) {
+            LIBS.rotateY(LegLeft_MATRIX, Math.PI/10);
+          }
+          if (igglyLegswitch == true) {
+            temp = LIBS.get_I4();
+            LIBS.rotateZ(temp, igglyLegLeftRotate);
+            LegLeft_MATRIX = LIBS.multiply(LegLeft_MATRIX, temp);
+            igglyLegswitch = false;
+            temp = LIBS.get_I4();
+            LIBS.rotateZ(temp, igglyLegLeftRotate);
+            LegRight_MATRIX = LIBS.multiply(LegRight_MATRIX, temp);
+            
+          }
+          else {
+            temp = LIBS.get_I4();
+            LIBS.rotateZ(temp, igglyLegLeftRotate);
+            LegRight_MATRIX = LIBS.multiply(LegRight_MATRIX, temp);
+            igglyLegswitch = true;
+            temp = LIBS.get_I4();
+            LIBS.rotateZ(temp, igglyLegLeftRotate);
+            LegLeft_MATRIX = LIBS.multiply(LegLeft_MATRIX, temp);
+          }
+
+          temp = LIBS.get_I4();
+          LIBS.translateX(temp, -Igglybuff_position[0]);
+          LegRight_MATRIX = LIBS.multiply(LegRight_MATRIX, temp);
+          temp = LIBS.get_I4();
+          LIBS.translateY(temp, -Igglybuff_position[1]);
+          LegRight_MATRIX = LIBS.multiply(LegRight_MATRIX, temp);
+          temp = LIBS.get_I4();
+          LIBS.translateZ(temp, -Igglybuff_position[2]);
+
+          if (rotate2 == true) {
+            igglyLegRightRotate -= rotatepeed;
+            if(igglyLegRightRotate <= -0.35){
+              rotate2 = false;
+            }
+          }
+          else {
+            igglyLegRightRotate += rotatepeed;
+            if(igglyLegRightRotate >= 0.35){
+              rotate2 = true;
+            }
+          }
 
 
           Badan.MODEL_MATRIX=BADAN_MATRIX; Badan.render(VIEW_MATRIX, PROJECTION_MATRIX);
@@ -834,6 +912,7 @@ var GL;
           ArmLeft.MODEL_MATRIX=ArmLeft_MATRIX; ArmLeft.render(VIEW_MATRIX, PROJECTION_MATRIX);
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
 
           MODEL_MATRIX = LIBS.get_I4();
         LIBS.translateX(MODEL_MATRIX, -1);
