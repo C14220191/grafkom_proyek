@@ -417,7 +417,25 @@ var GL;
       cloud.vertices[i + 4] = 255/255; // Green component
       cloud.vertices[i + 5] = 255/255; // Blue component
     }
-    
+    var Topi = LIBS.Cone(0, 0, 0, 0.5, 2, 50);
+      for (var i = 0; i < Topi.vertices.length; i+=6) {
+      if (i == 0) {
+        Topi.vertices[i + 3] = 255/255; // Red component
+        Topi.vertices[i + 4] = 0/255; // Green component
+        Topi.vertices[i + 5] = 0/255; // Blue component
+      }
+        else if ((i/6)%2 != 0) {
+          Topi.vertices[i + 3] = 255/255; // Red component
+          Topi.vertices[i + 4] = 255/255; // Green component
+          Topi.vertices[i + 5] = 255/255; // Blue component
+        }
+        else {
+          Topi.vertices[i + 3] = 255/255; // Red component
+          Topi.vertices[i + 4] = 0/255; // Green component
+          Topi.vertices[i + 5] = 0/255; // Blue component
+        }
+
+      }
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
       var VIEW_MATRIX = LIBS.get_I4();
@@ -434,6 +452,8 @@ var GL;
       var GRASS_MATRIX = LIBS.get_I4();
       var MOUTH_MATRIX = LIBS.get_I4();
       var SPIRAL_MATRIX  = LIBS.get_I4();
+      
+      var Topi_MATRIX = LIBS.get_I4();
       
       var BATANG1_MATRIX = LIBS.get_I4();
       var BATANG2_MATRIX = LIBS.get_I4();
@@ -857,7 +877,8 @@ var GL;
       var Daun1 = new MyObject(daun.vertices, daun.faces, shader_vertex_source, shader_fragment_source); Daun1.setup();
       var Batang2 = new MyObject(Wood.vertices, Wood.faces, shader_vertex_source, shader_fragment_source);Batang2.setup();
       var Daun2 = new MyObject(daun.vertices, daun.faces, shader_vertex_source, shader_fragment_source); Daun2.setup();
-
+      var Topi = new MyObject(Topi.vertices, Topi.faces, shader_vertex_source, shader_fragment_source); Topi.setup();
+     
       var Gumpalan1 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan1.setup();
       var Gumpalan2 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan2.setup();
       var Gumpalan3 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan3.setup();
@@ -1014,6 +1035,9 @@ var GL;
         GRASS_MATRIX = LIBS.get_I4();
         LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 40,40,40);
 
+        Topi_MATRIX = LIBS.get_I4();
+        LIBS.translateY(Topi_MATRIX, 1.5); LIBS.translateZ(Topi_MATRIX, Igglybuff_position[2]);
+       
         if(AwanS == true){
           ScaleAwan += 0.005;
           if(ScaleAwan >= 1.5){
@@ -1234,7 +1258,8 @@ var GL;
           Gumpalan10.MODEL_MATRIX = GUMPALAN10_MATRIX; Gumpalan10.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Gumpalan11.MODEL_MATRIX = GUMPALAN11_MATRIX; Gumpalan11.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Gumpalan12.MODEL_MATRIX = GUMPALAN12_MATRIX; Gumpalan12.render(VIEW_MATRIX, PROJECTION_MATRIX);
-
+          Topi.MODEL_MATRIX=Topi_MATRIX; Topi.render(VIEW_MATRIX, PROJECTION_MATRIX);
+         
 
           if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;
