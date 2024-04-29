@@ -302,6 +302,12 @@ var GL;
       Wood.vertices[i + 4] = 69/255; // Green component
       Wood.vertices[i + 5] = 19/255; // Blue component
     }
+    var daun = LIBS.Cone(0, 0, 0, 1, 2, 32);
+    for (var i = 0; i < daun.vertices.length; i+=6) {
+      daun.vertices[i + 3] = 0/255; // Red component
+      daun.vertices[i + 4] = 100/255; // Green component
+      daun.vertices[i + 5] = 0/255; // Blue component
+    }
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -319,8 +325,9 @@ var GL;
       var GRASS_MATRIX = LIBS.get_I4();
       var MOUTH_MATRIX = LIBS.get_I4();
       var SPIRAL_MATRIX  = LIBS.get_I4();
-      var BATANGPOHON1_MATRIX = LIBS.get_I4();
-      var BATANGPOHON2_MATRIX = LIBS.get_I4();
+      var BATANG1_MATRIX = LIBS.get_I4();
+      var BATANG2_MATRIX = LIBS.get_I4();
+      var DAUN1_MATRIX = LIBS.get_I4();
 
 
       var headModelMatrix = LIBS.get_I4();
@@ -722,6 +729,8 @@ var GL;
       mouth.setup();
       var Batang1 = new MyObject(Wood.vertices, Wood.faces, shader_vertex_source, shader_fragment_source);
       Batang1.setup();
+      var Daun1 = new MyObject(daun.vertices, daun.faces, shader_vertex_source, shader_fragment_source); 
+      Daun1.setup();
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
 
@@ -843,9 +852,13 @@ var GL;
         LIBS.rotateX(VIEW_MATRIX, dY*0.01); LIBS.rotateY(VIEW_MATRIX, dX*0.01);
         LIBS.translateX(VIEW_MATRIX, 0); LIBS.translateY(VIEW_MATRIX,0); LIBS.translateZ(VIEW_MATRIX,-10);
 
-        BATANGPOHON1_MATRIX = LIBS.get_I4();
-        LIBS.translateY(BATANGPOHON1_MATRIX, 7); LIBS.translateX(BATANGPOHON1_MATRIX, 15); LIBS.translateZ(BATANGPOHON1_MATRIX, -10); 
-        LIBS.scale(BATANGPOHON1_MATRIX, 1, 2, 1);
+        DAUN1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(DAUN1_MATRIX, 12); LIBS.translateX(DAUN1_MATRIX, 15); LIBS.translateZ(DAUN1_MATRIX, -10);
+        LIBS.scale(DAUN1_MATRIX, 4, 10, 4);
+        
+        BATANG1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(BATANG1_MATRIX, 7); LIBS.translateX(BATANG1_MATRIX, 15); LIBS.translateZ(BATANG1_MATRIX, -10); 
+        LIBS.scale(BATANG1_MATRIX, 1, 2, 1);
 
         GRASS_MATRIX = LIBS.get_I4();
         LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 40,40,40);
@@ -1003,8 +1016,8 @@ var GL;
           Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Spiral.MODEL_MATRIX=SPIRAL_MATRIX ; Spiral.render(VIEW_MATRIX, PROJECTION_MATRIX);
           mouth.MODEL_MATRIX=MOUTH_MATRIX; mouth.render(VIEW_MATRIX, PROJECTION_MATRIX);
-          Batang1.MODEL_MATRIX = BATANGPOHON1_MATRIX; Batang1.render(VIEW_MATRIX, PROJECTION_MATRIX);
-
+          Batang1.MODEL_MATRIX = BATANG1_MATRIX; Batang1.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Daun1.MODEL_MATRIX=DAUN1_MATRIX; Daun1.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
           if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;
