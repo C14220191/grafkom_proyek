@@ -376,7 +376,6 @@ var GL;
         grass.vertex[i + 5] = 35/255; // Blue component
       }
 
-      var trunk = generateCylinderVerti(0, 20, (CANVAS.width*2), (CANVAS.height*2), [134/255, 89/255, 45/255]);
       
       var SpiralPoints = [
         0, 0 , 1, 0, 0, 0,
@@ -398,6 +397,24 @@ var GL;
       0, -1.5, 1, 0, 0, 0,
       -1, 0, 1, 0, 0, 0,
     ];
+    var Wood = LIBS.generateTabung(0, 0, 0, 1, 7.5, 100, 1, 1, 1);
+    for (var i = 0; i < Wood.vertices.length; i+=6) {
+      Wood.vertices[i + 3] = 139/255; // Red component
+      Wood.vertices[i + 4] = 69/255; // Green component
+      Wood.vertices[i + 5] = 19/255; // Blue component
+    }
+    var daun = LIBS.Cone(0, 0, 0, 2, 3, 1000);
+    for (var i = 0; i < daun.vertices.length; i+=6) {
+      daun.vertices[i + 3] = 0/255; // Red component
+      daun.vertices[i + 4] = 100/255; // Green component
+      daun.vertices[i + 5] = 0/255; // Blue component
+    }
+    var cloud = LIBS.Sphere(0, 0, 0, 3, 100);
+    for (var i = 0; i < cloud.vertices.length; i+=6) {
+      cloud.vertices[i + 3] = 255/255; // Red component
+      cloud.vertices[i + 4] = 255/255; // Green component
+      cloud.vertices[i + 5] = 255/255; // Blue component
+    }
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -415,8 +432,27 @@ var GL;
       var GRASS_MATRIX = LIBS.get_I4();
       var MOUTH_MATRIX = LIBS.get_I4();
       var SPIRAL_MATRIX  = LIBS.get_I4();
-      var TRUNK_MATRIX = LIBS.get_I4();
       
+      var BATANG1_MATRIX = LIBS.get_I4();
+      var BATANG2_MATRIX = LIBS.get_I4();
+      var DAUN1_MATRIX = LIBS.get_I4();
+      var DAUN2_MATRIX = LIBS.get_I4();
+
+      var GUMPALAN1_MATRIX = LIBS.get_I4();
+      var GUMPALAN2_MATRIX = LIBS.get_I4();
+      var GUMPALAN3_MATRIX = LIBS.get_I4();
+      var GUMPALAN4_MATRIX = LIBS.get_I4();
+      var GUMPALAN5_MATRIX = LIBS.get_I4();
+      var GUMPALAN6_MATRIX = LIBS.get_I4();
+
+      var GUMPALAN7_MATRIX = LIBS.get_I4();
+      var GUMPALAN8_MATRIX = LIBS.get_I4();
+      var GUMPALAN9_MATRIX = LIBS.get_I4();
+      var GUMPALAN10_MATRIX = LIBS.get_I4();
+      var GUMPALAN11_MATRIX = LIBS.get_I4();
+      var GUMPALAN12_MATRIX = LIBS.get_I4();
+
+
 
       var headModelMatrix = LIBS.get_I4();
     var legModelMatrix = LIBS.get_I4();
@@ -435,8 +471,6 @@ var GL;
     var fingerModelMatrix2 = LIBS.get_I4();
     var fingerModelMatrix3 = LIBS.get_I4();
     var fingerModelMatrix4 = LIBS.get_I4();
-    var fingerModelMatrix5 = LIBS.get_I4();
-    var LEAF_MATRIX = LIBS.get_I4();
     var thumbModelMatrix = LIBS.get_I4();
     var thumbModelMatrix2 = LIBS.get_I4();
     var mouthModelMatrix = LIBS.get_I4();
@@ -814,11 +848,27 @@ var GL;
       var RightPupil = new MyObject(rightPupil.vertex, rightPupil.faces, shader_vertex_source, shader_fragment_source); RightPupil.setup();
       var LeftPupil = new MyObject(leftPupil.vertex, leftPupil.faces, shader_vertex_source, shader_fragment_source); LeftPupil.setup();
       var Grass = new MyObject(grass.vertex, grass.faces, shader_vertex_source, shader_fragment_source); Grass.setup();
-      var Trunk = new MyObject(trunk.vertices, trunk.faces, shader_vertex_source, shader_fragment_source); Trunk.setup();
-      var Spiral = new MyObject(LIBS.buatKurva3D(SpiralPoints, 0.1).vertices, LIBS.buatKurva3D(SpiralPoints, 1).indices, shader_vertex_source, shader_fragment_source);
-      Spiral.setup();
-      var mouth = new MyObject(LIBS.buatKurva3D(mouthPoints, 0.1).vertices, LIBS.buatKurva3D(mouthPoints, 1).indices, shader_vertex_source, shader_fragment_source);
-      mouth.setup();
+      var Spiral = new MyObject(LIBS.buatKurva3D(SpiralPoints, 0.1).vertices, LIBS.buatKurva3D(SpiralPoints, 1).indices, shader_vertex_source, shader_fragment_source);Spiral.setup();
+
+      var mouth = new MyObject(LIBS.buatKurva3D(mouthPoints, 0.1).vertices, LIBS.buatKurva3D(mouthPoints, 1).indices, shader_vertex_source, shader_fragment_source);mouth.setup();
+      var Batang1 = new MyObject(Wood.vertices, Wood.faces, shader_vertex_source, shader_fragment_source);Batang1.setup();
+      var Daun1 = new MyObject(daun.vertices, daun.faces, shader_vertex_source, shader_fragment_source); Daun1.setup();
+      var Batang2 = new MyObject(Wood.vertices, Wood.faces, shader_vertex_source, shader_fragment_source);Batang2.setup();
+      var Daun2 = new MyObject(daun.vertices, daun.faces, shader_vertex_source, shader_fragment_source); Daun2.setup();
+
+      var Gumpalan1 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan1.setup();
+      var Gumpalan2 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan2.setup();
+      var Gumpalan3 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan3.setup();
+      var Gumpalan4 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan4.setup();
+      var Gumpalan5 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan5.setup();
+      var Gumpalan6 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan6.setup();
+
+      var Gumpalan7 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan7.setup();
+      var Gumpalan8 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan8.setup();
+      var Gumpalan9 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan9.setup();
+      var Gumpalan10 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan10.setup();
+      var Gumpalan11 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan11.setup();
+      var Gumpalan12 = new MyObject(cloud.vertices, cloud.faces, shader_vertex_source, shader_fragment_source);Gumpalan12.setup();
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
     var mouthSton = new MyObject(LIBS.buatKurva3D(stonMouth, 0.1).vertices, LIBS.buatKurva3D(stonMouth, 1).indices, shader_vertex_source, shader_fragment_source);
@@ -858,16 +908,6 @@ var GL;
 
     var hatObject = new MyObject(hatVertices, hatFaces, shader_vertex_source, shader_fragment_source);hatObject.setup();
 
-    var leafData = LIBS.Cone(0, 0, 0, 5, 15, 100);
-    for (var i = 0; i < leafData.vertices.length; i+=6) {
-      leafData.vertices[i + 3] = 0/255; // Red component
-      leafData.vertices[i + 4] = 204/255; // Green component
-      leafData.vertices[i + 5] = 0/255; // Blue component
-    };
-
-    var leafObject = new MyObject(leafData.vertices, leafData.faces, shader_vertex_source, shader_fragment_source);leafObject.setup();
-
-
     var fingerData = LIBS.Cone(0, 0, 0, 0.5, 2, 100);
     for (var i = 0; i < fingerData.vertices.length; i+=6) {
       fingerData.vertices[i + 3] = 179/255; // Red component
@@ -879,12 +919,11 @@ var GL;
     var fingerObject2 = new MyObject(fingerData.vertices, fingerData.faces, shader_vertex_source, shader_fragment_source);fingerObject2.setup();
     var fingerObject3 = new MyObject(fingerData.vertices, fingerData.faces, shader_vertex_source, shader_fragment_source);fingerObject3.setup();
     var fingerObject4 = new MyObject(fingerData.vertices, fingerData.faces, shader_vertex_source, shader_fragment_source);fingerObject4.setup();
-    var fingerObject5 = new MyObject(fingerData.vertices, fingerData.faces, shader_vertex_source, shader_fragment_source);fingerObject5.setup();
 
     fingerObject.child.push(fingerObject2);
     fingerObject.child.push(fingerObject3);
     fingerObject.child.push(fingerObject4);
-    fingerObject.child.push(fingerObject5);
+
 
     var thumbData = LIBS.Cone(0, 0, 0, 1, 2, 100);
     for (var i = 0; i < thumbData.vertices.length; i+=6) {
@@ -950,15 +989,66 @@ var GL;
         
         LIBS.translateX(VIEW_MATRIX, pos_x); LIBS.translateY(VIEW_MATRIX, pos_y); LIBS.translateZ(VIEW_MATRIX, pos_z);
         
-        LIBS.setPosition(VIEW_MATRIX,0,0,-50)
+        LIBS.setPosition(VIEW_MATRIX,0,-12,-60)
         LIBS.rotateX(VIEW_MATRIX, dY*0.01); LIBS.rotateY(VIEW_MATRIX, dX*0.01);
         LIBS.translateX(VIEW_MATRIX, 0); LIBS.translateY(VIEW_MATRIX,0); LIBS.translateZ(VIEW_MATRIX,-10);
 
-        GRASS_MATRIX = LIBS.get_I4();
-        LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 100, 100, 100);
+        DAUN1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(DAUN1_MATRIX, 12); LIBS.translateX(DAUN1_MATRIX, 12); LIBS.translateZ(DAUN1_MATRIX, -10);
+        LIBS.scale(DAUN1_MATRIX, 4, 10, 4);
+        
+        BATANG1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(BATANG1_MATRIX, 7); LIBS.translateX(BATANG1_MATRIX, 12); LIBS.translateZ(BATANG1_MATRIX, -10); 
+        LIBS.scale(BATANG1_MATRIX, 1, 2, 1);
 
-        TRUNK_MATRIX = LIBS.get_I4();
-        LIBS.translateY(TRUNK_MATRIX, -0.5); LIBS.translateX(TRUNK_MATRIX,8); LIBS.scale(TRUNK_MATRIX, 0.5, 0.5, 0.5);
+        DAUN2_MATRIX = LIBS.get_I4();
+        LIBS.translateY(DAUN2_MATRIX, 12); LIBS.translateX(DAUN2_MATRIX, -22); LIBS.translateZ(DAUN2_MATRIX, -10);
+        LIBS.scale(DAUN2_MATRIX, 4, 10, 4);
+
+        BATANG2_MATRIX = LIBS.get_I4();
+        LIBS.translateY(BATANG2_MATRIX, 7); LIBS.translateX(BATANG2_MATRIX, -22); LIBS.translateZ(BATANG2_MATRIX, -10);
+        LIBS.scale(BATANG2_MATRIX, 1, 2, 1);
+
+        GRASS_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 40,40,40);
+
+        GUMPALAN1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN1_MATRIX, 40); LIBS.translateX(GUMPALAN1_MATRIX, 0); LIBS.translateZ(GUMPALAN1_MATRIX, -10);
+        LIBS.scale(GUMPALAN1_MATRIX, 2, 2, 2);
+        GUMPALAN2_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN2_MATRIX, 40); LIBS.translateX(GUMPALAN2_MATRIX, 5); LIBS.translateZ(GUMPALAN2_MATRIX, -10);
+        LIBS.scale(GUMPALAN2_MATRIX, 2, 2, 2);
+        GUMPALAN3_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN3_MATRIX, 40); LIBS.translateX(GUMPALAN3_MATRIX, -5); LIBS.translateZ(GUMPALAN3_MATRIX, -10);
+        LIBS.scale(GUMPALAN3_MATRIX, 2, 2, 2);
+        GUMPALAN4_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN4_MATRIX, 39); LIBS.translateX(GUMPALAN4_MATRIX, 0); LIBS.translateZ(GUMPALAN4_MATRIX, -8);
+        LIBS.scale(GUMPALAN4_MATRIX, 2, 2, 2);
+        GUMPALAN5_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN5_MATRIX, 39); LIBS.translateX(GUMPALAN5_MATRIX, 2); LIBS.translateZ(GUMPALAN5_MATRIX, -8);
+        LIBS.scale(GUMPALAN5_MATRIX, 2, 2, 2);
+        GUMPALAN6_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN6_MATRIX, 41); LIBS.translateX(GUMPALAN6_MATRIX, -2); LIBS.translateZ(GUMPALAN6_MATRIX, -10);
+        LIBS.scale(GUMPALAN6_MATRIX, 2, 2, 2);
+
+        GUMPALAN7_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN7_MATRIX, 40); LIBS.translateX(GUMPALAN7_MATRIX, -25); LIBS.translateZ(GUMPALAN7_MATRIX, -25);
+        LIBS.scale(GUMPALAN7_MATRIX, 2, 2, 2);
+        GUMPALAN8_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN8_MATRIX, 40); LIBS.translateX(GUMPALAN8_MATRIX, -20); LIBS.translateZ(GUMPALAN8_MATRIX, -25);
+        LIBS.scale(GUMPALAN8_MATRIX, 2, 2, 2);
+        GUMPALAN9_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN9_MATRIX, 40); LIBS.translateX(GUMPALAN9_MATRIX, -30); LIBS.translateZ(GUMPALAN9_MATRIX, -25);
+        LIBS.scale(GUMPALAN9_MATRIX, 2, 2, 2);
+        GUMPALAN10_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN10_MATRIX, 39); LIBS.translateX(GUMPALAN10_MATRIX, -25); LIBS.translateZ(GUMPALAN10_MATRIX, -23);
+        LIBS.scale(GUMPALAN10_MATRIX, 2, 2, 2);
+        GUMPALAN11_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN11_MATRIX, 39); LIBS.translateX(GUMPALAN11_MATRIX, -23); LIBS.translateZ(GUMPALAN11_MATRIX, -23);
+        LIBS.scale(GUMPALAN11_MATRIX, 2, 2, 2);
+        GUMPALAN12_MATRIX = LIBS.get_I4();
+        LIBS.translateY(GUMPALAN12_MATRIX, 40); LIBS.translateX(GUMPALAN12_MATRIX, -27); LIBS.translateZ(GUMPALAN12_MATRIX, -25);
+        LIBS.scale(GUMPALAN12_MATRIX, 2, 2, 2);
 
         if (goBack == false) {
           Igglybuff_position[2] += 0.1;
@@ -1111,20 +1201,35 @@ var GL;
           ArmLeft.MODEL_MATRIX=ArmLeft_MATRIX; ArmLeft.render(VIEW_MATRIX, PROJECTION_MATRIX);
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
-          Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
-          Trunk.MODEL_MATRIX=TRUNK_MATRIX; Trunk.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);;
           Spiral.MODEL_MATRIX=SPIRAL_MATRIX ; Spiral.render(VIEW_MATRIX, PROJECTION_MATRIX);
           mouth.MODEL_MATRIX=MOUTH_MATRIX; mouth.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Batang1.MODEL_MATRIX = BATANG1_MATRIX; Batang1.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Daun1.MODEL_MATRIX=DAUN1_MATRIX; Daun1.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Batang2.MODEL_MATRIX = BATANG2_MATRIX; Batang2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Daun2.MODEL_MATRIX=DAUN2_MATRIX; Daun2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan1.MODEL_MATRIX = GUMPALAN1_MATRIX; Gumpalan1.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan2.MODEL_MATRIX = GUMPALAN2_MATRIX; Gumpalan2.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan3.MODEL_MATRIX = GUMPALAN3_MATRIX; Gumpalan3.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan4.MODEL_MATRIX = GUMPALAN4_MATRIX; Gumpalan4.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan5.MODEL_MATRIX = GUMPALAN5_MATRIX; Gumpalan5.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan6.MODEL_MATRIX = GUMPALAN6_MATRIX; Gumpalan6.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan7.MODEL_MATRIX = GUMPALAN7_MATRIX; Gumpalan7.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan8.MODEL_MATRIX = GUMPALAN8_MATRIX; Gumpalan8.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan9.MODEL_MATRIX = GUMPALAN9_MATRIX; Gumpalan9.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan10.MODEL_MATRIX = GUMPALAN10_MATRIX; Gumpalan10.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan11.MODEL_MATRIX = GUMPALAN11_MATRIX; Gumpalan11.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Gumpalan12.MODEL_MATRIX = GUMPALAN12_MATRIX; Gumpalan12.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
 
           if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;
-            if (Stonjourner_position[2] >= 10) {
+            if (Stonjourner_position[2] >= 30) {
               goBack2 = true;
             } 
           }else {
             Stonjourner_position[2] -= 0.1;
-            if (Stonjourner_position[2] <= -10) {
+            if (Stonjourner_position[2] <= -30) {
               goBack2 = false;
             }
           }
@@ -1143,12 +1248,12 @@ var GL;
         legModelMatrix = LIBS.get_I4();
         if(rightLeg == false){
           StonLegRightRotate += rotatepeed;
-          if(StonLegRightRotate >= 0.35){
+          if(StonLegRightRotate >= 0.65){
             rightLeg = true;
           }
         }else{
           StonLegRightRotate -= rotatepeed;
-          if(StonLegRightRotate <= -0.35){
+          if(StonLegRightRotate <= -0.65){
             rightLeg = false;
           }
         }
@@ -1165,12 +1270,12 @@ var GL;
         legModelMatrix2 = LIBS.get_I4();
         if(leftLeg == true){
           StonLegLeftRotate -= rotatepeed;
-          if(StonLegLeftRotate <= -0.35){
+          if(StonLegLeftRotate <= -0.65){
             leftLeg = false;
           }
         }else{
           StonLegLeftRotate += rotatepeed;
-          if(StonLegLeftRotate >= 0.35){
+          if(StonLegLeftRotate >= 0.65){
             leftLeg = true;
           }
         }
@@ -1299,7 +1404,7 @@ var GL;
         }
 
         LIBS.translateX(fingerModelMatrix, -2.5);
-        LIBS.translateY(fingerModelMatrix, 15.1);
+        LIBS.translateY(fingerModelMatrix, 14.9);
         LIBS.translateZ(fingerModelMatrix, Stonjourner_position[2]);
         LIBS.rotateZ(fingerModelMatrix, fingerRotate);
         
@@ -1310,7 +1415,7 @@ var GL;
         
 
         LIBS.translateX(fingerModelMatrix2, -1.4);
-        LIBS.translateY(fingerModelMatrix2, 15.1);
+        LIBS.translateY(fingerModelMatrix2, 14.9);
         LIBS.translateZ(fingerModelMatrix2, Stonjourner_position[2]);
         LIBS.rotateZ(fingerModelMatrix2, -fingerRotate);
 
@@ -1320,7 +1425,7 @@ var GL;
         fingerModelMatrix3 = LIBS.get_I4();
 
         LIBS.translateX(fingerModelMatrix3, -13.5);
-        LIBS.translateY(fingerModelMatrix3, 15.1);
+        LIBS.translateY(fingerModelMatrix3, 14.9);
         LIBS.translateZ(fingerModelMatrix3, Stonjourner_position[2]);
         LIBS.rotateZ(fingerModelMatrix3, -fingerRotate);
 
@@ -1330,38 +1435,30 @@ var GL;
         fingerModelMatrix4 = LIBS.get_I4();
 
         LIBS.translateX(fingerModelMatrix4, -14.6);
-        LIBS.translateY(fingerModelMatrix4, 15.1);
+        LIBS.translateY(fingerModelMatrix4, 14.9);
         LIBS.translateZ(fingerModelMatrix4, Stonjourner_position[2]);
         LIBS.rotateZ(fingerModelMatrix4, fingerRotate);
 
         fingerObject4.MODEL_MATRIX = fingerModelMatrix4;
         fingerObject4.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
-        fingerModelMatrix5 = LIBS.get_I4();
-
-        LIBS.translateX(fingerModelMatrix5, -15.7);
-        LIBS.translateY(fingerModelMatrix5, 15.1);
-        LIBS.translateZ(fingerModelMatrix5, Stonjourner_position[2]);
-
-        fingerObject5.MODEL_MATRIX = fingerModelMatrix5;
-        fingerObject5.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
         thumbModelMatrix = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix, -0.9);
+        LIBS.translateX(thumbModelMatrix, -3);
         LIBS.translateY(thumbModelMatrix, 13.7);
         LIBS.translateZ(thumbModelMatrix, Stonjourner_position[2]);
-        LIBS.rotateZ(thumbModelMatrix, -1.55);
+        LIBS.rotateZ(thumbModelMatrix, 1.55);
 
         thumbObject.MODEL_MATRIX = thumbModelMatrix;
         thumbObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
         thumbModelMatrix2 = LIBS.get_I4();
 
-        LIBS.translateX(thumbModelMatrix2, -15.1);
+        LIBS.translateX(thumbModelMatrix2, -12.9);
         LIBS.translateY(thumbModelMatrix2, 13.7);
         LIBS.translateZ(thumbModelMatrix2, Stonjourner_position[2]);
-        LIBS.rotateZ(thumbModelMatrix2, 1.55);
+        LIBS.rotateZ(thumbModelMatrix2, -1.55);
 
         thumbObject2.MODEL_MATRIX = thumbModelMatrix2;
         thumbObject2.render(VIEW_MATRIX, PROJECTION_MATRIX);
@@ -1378,13 +1475,6 @@ var GL;
         mouthSton.MODEL_MATRIX = mouthModelMatrix;
         mouthSton.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
-        leafModelMatrix = LIBS.get_I4();
-
-        LIBS.translateX(leafModelMatrix, 8);
-        LIBS.translateY(leafModelMatrix, 6.6);
-
-        leafObject.MODEL_MATRIX = leafModelMatrix;
-        leafObject.render(VIEW_MATRIX, PROJECTION_MATRIX);
       
           // Curve.MODEL_MATRIX=MODEL_MATRIX10; Curve.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
