@@ -140,6 +140,8 @@ var GL;
       var WorldZ = 0;
   
       var FRICTION = 0.95;
+      var ScaleAwan = 0.5;
+      var AwanS = true;
 
 
       var mouseDown = function(e){
@@ -1012,43 +1014,55 @@ var GL;
         GRASS_MATRIX = LIBS.get_I4();
         LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 40,40,40);
 
+        if(AwanS == true){
+          ScaleAwan += 0.005;
+          if(ScaleAwan >= 1.5){
+            AwanS = false;
+          }
+        }else{
+          ScaleAwan -= 0.005;
+          if(ScaleAwan <= 0.5){
+            AwanS = true;
+          }
+        }
+
         GUMPALAN1_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN1_MATRIX, 40); LIBS.translateX(GUMPALAN1_MATRIX, 0); LIBS.translateZ(GUMPALAN1_MATRIX, -10);
-        LIBS.scale(GUMPALAN1_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN1_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN2_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN2_MATRIX, 40); LIBS.translateX(GUMPALAN2_MATRIX, 5); LIBS.translateZ(GUMPALAN2_MATRIX, -10);
-        LIBS.scale(GUMPALAN2_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN2_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN3_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN3_MATRIX, 40); LIBS.translateX(GUMPALAN3_MATRIX, -5); LIBS.translateZ(GUMPALAN3_MATRIX, -10);
-        LIBS.scale(GUMPALAN3_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN3_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN4_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN4_MATRIX, 39); LIBS.translateX(GUMPALAN4_MATRIX, 0); LIBS.translateZ(GUMPALAN4_MATRIX, -8);
-        LIBS.scale(GUMPALAN4_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN4_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN5_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN5_MATRIX, 39); LIBS.translateX(GUMPALAN5_MATRIX, 2); LIBS.translateZ(GUMPALAN5_MATRIX, -8);
-        LIBS.scale(GUMPALAN5_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN5_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN6_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN6_MATRIX, 41); LIBS.translateX(GUMPALAN6_MATRIX, -2); LIBS.translateZ(GUMPALAN6_MATRIX, -10);
-        LIBS.scale(GUMPALAN6_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN6_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
 
         GUMPALAN7_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN7_MATRIX, 40); LIBS.translateX(GUMPALAN7_MATRIX, -25); LIBS.translateZ(GUMPALAN7_MATRIX, -25);
-        LIBS.scale(GUMPALAN7_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN7_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN8_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN8_MATRIX, 40); LIBS.translateX(GUMPALAN8_MATRIX, -20); LIBS.translateZ(GUMPALAN8_MATRIX, -25);
-        LIBS.scale(GUMPALAN8_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN8_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN9_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN9_MATRIX, 40); LIBS.translateX(GUMPALAN9_MATRIX, -30); LIBS.translateZ(GUMPALAN9_MATRIX, -25);
-        LIBS.scale(GUMPALAN9_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN9_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN10_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN10_MATRIX, 39); LIBS.translateX(GUMPALAN10_MATRIX, -25); LIBS.translateZ(GUMPALAN10_MATRIX, -23);
-        LIBS.scale(GUMPALAN10_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN10_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN11_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN11_MATRIX, 39); LIBS.translateX(GUMPALAN11_MATRIX, -23); LIBS.translateZ(GUMPALAN11_MATRIX, -23);
-        LIBS.scale(GUMPALAN11_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN11_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
         GUMPALAN12_MATRIX = LIBS.get_I4();
         LIBS.translateY(GUMPALAN12_MATRIX, 40); LIBS.translateX(GUMPALAN12_MATRIX, -27); LIBS.translateZ(GUMPALAN12_MATRIX, -25);
-        LIBS.scale(GUMPALAN12_MATRIX, 2, 2, 2);
+        LIBS.scale(GUMPALAN12_MATRIX, 2+ScaleAwan, 2, 2+ScaleAwan);
 
         if (goBack == false) {
           Igglybuff_position[2] += 0.1;
