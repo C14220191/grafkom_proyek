@@ -37,70 +37,117 @@ var LIBS = {
 
     return texture;
   },
+  generateBSpline:function(controlPoint, m, degree) {
+    var curves = [];
+    var knotVector = [];
 
-  createCurve: function(controlPoints, degree, numSegments) {
-    // Menghitung basis B-spline
+    var n = controlPoint.length / 6;
 
-    function BSplineBasis(degree, numSegments) {
-      const knots = [];
-      // Uniform knot vector (assuming uniform parameterization)
-      for (let i = 0; i <= degree + numSegments; i++) {
-        knots.push(i / (numSegments + degree));
-      }
-  
-      const basis = [];
-      // Initialize basis with empty arrays
-      for (let i = 0; i <= degree; i++) {
-        basis[i] = new Array(numSegments + degree + 1).fill(0);
-      }
-  
-      // Basis functions for degree 0 (piecewise constants)
-      for (let i = 0; i <= numSegments; i++) {
-        basis[0][i] = 1;
-      }
-  
-      // Recursive calculation for higher degrees
-      for (let k = 1; k <= degree; k++) {
-        for (let i = 0; i <= numSegments - k; i++) {
-          const left = knots[i + k] - knots[i];
-          const right = knots[i + k + 1] - knots[i + 1];
-          const a1 = (basis[k - 1][i] * left) / (left + right);
-          const a2 = (basis[k - 1][i + 1] * right) / (left + right);
-          basis[k][i] = a1;
-          basis[k][i + 1] = a2;
+
+    // Calculate the knot values based on the degree and number of control points
+    for (var i = 0; i < n + degree + 1; i++) {
+        if (i < degree + 1) {
+            knotVector.push(0);
+        } else if (i >= n) {
+            knotVector.push(n - degree);
+        } else {
+            knotVector.push(i - degree);
         }
-      }
-  
-      return basis;
     }
 
-    const basis = BSplineBasis(degree, numSegments);
-  
-    // Menghitung kurva
-    const curvePoints = [];
-    for (let i = 0; i < numSegments; i++) {
-      const point = [0, 0, 0];
-      for (let j = 0; j < degree + 1; j++) {
-        point[0] += basis[j][i] * controlPoints[j][0];
-        point[1] += basis[j][i] * controlPoints[j][1];
-        point[2] += basis[j][i] * controlPoints[j][2];
-      }
-      curvePoints.push(point);
+
+
+    var basisFunc = function (i, j, t) {
+        if (j == 0) {
+            if (knotVector[i] <= t && t < (knotVector[(i + 1)])) {
+                return 1;
+            } else {
+                return 0;
+            }
+        }
+
+        var den1 = knotVector[i + j] - knotVector[i];
+        var den2 = knotVector[i + j + 1] - knotVector[i + 1];
+
+        var term1 = 0;
+        var term2 = 0;
+
+
+        if (den1 != 0 && !isNaN(den1)) {
+            term1 = ((t - knotVector[i]) / den1) * basisFunc(i, j - 1, t);
+        }
+
+        if (den2 != 0 && !isNaN(den2)) {
+            term2 = ((knotVector[i + j + 1] - t) / den2) * basisFunc(i + 1, j - 1, t);
+        }
+
+        return term1 + term2;
     }
-  
-    // Menghitung wajah
-    const faces = [];
-    for (let i = 0; i < numSegments - 1; i++) {
-      faces.push([i, i + 1, i + 2]);
-      faces.push([i + 2, i + 1, i]);
+
+
+    for (var t = 0; t < m; t++) {
+        var x = 0;
+        var y = 0;
+        var z = 0;
+        var r = 0;
+        var g = 0;
+        var b = 0;
+
+        var u = (t / m * (knotVector[controlPoint.length / 6] - knotVector[degree])) + knotVector[degree];
+
+        //C(t)
+        for (var key = 0; key < n; key++) {
+
+            var C = basisFunc(key, degree, u);
+            x += (controlPoint[key * 6] * C);
+            y += (controlPoint[key * 6 + 1] * C);
+            z += (controlPoint[key * 6 + 2] * C);
+            r += (controlPoint[key * 6 + 3] * C);
+            g += (controlPoint[key * 6 + 4] * C);
+            b += (controlPoint[key * 6 + 5] * C);
+        }
+        curves.push(x);
+        curves.push(y);
+        curves.push(z);
+        curves.push(r);
+        curves.push(g);
+        curves.push(b);
+
     }
-  
-    // Mengembalikan verteks dan wajah
-    return {
-      vertices: curvePoints,
-      faces: faces,
-    };
-  },
+    return curves;
+},
+
+
+
+
+buatKurva3D:function(pointList, radius) {
+    const totalPoints = 100;
+    const vertices = [];
+    const indices = [];
+    const splinePoints = this.generateBSpline(pointList, totalPoints, (pointList.length / 6) - 1);
+
+    for (let i = 0; i < totalPoints * 2; i++) {
+        for (let j = 0; j < 360; j++) {
+            const angleInRadians = (j * Math.PI) / 180;
+            const newX = splinePoints[i * 6] + Math.cos(angleInRadians) * radius; // Rotate around X-axis
+            const newY = splinePoints[i * 6 + 1] + Math.sin(angleInRadians) * radius; // Y-coordinate remains the same
+            const newZ = splinePoints[i * 6 + 2]; // Translate along Z-axis
+            const r = splinePoints[i * 6 + 3];
+            const g = splinePoints[i * 6 + 4];
+            const b = splinePoints[i * 6 + 5];
+            vertices.push(newX, newY, newZ, r, g, b);
+        }
+    }
+
+    for (let i = 0; i < totalPoints * 2; i++) {
+        for (let j = 0; j < 360; j++) {
+            indices.push(j + (i * 360), j + 360 + (i * 360), j + 361 + (i * 360));
+            indices.push(j + (i * 360), j + 1 + (i * 360), j + 361 + (i * 360));
+        }
+    }
+
+    return { vertices, indices };
+},
 
   Circle: function(x,y,rad){
     var list = []

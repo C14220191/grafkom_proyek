@@ -281,6 +281,21 @@ var GL;
         grass.vertex[i + 4] = 142/255; // Green component
         grass.vertex[i + 5] = 35/255; // Blue component
       }
+      
+      var SpiralPoints = [
+        0, 0 , 1, 0, 0, 0,
+        1, 1, 1, 0, 0, 0,
+        1.5, -2, 1, 0, 0, 0,
+        -3, 0, 1, 0, 0, 0,
+        0, 1, 1, 0, 0, 0,
+        1, 1, 1, 0, 0, 0,
+        1, 0, 1, 0, 0, 0,
+    ];
+    var mouthPoints = [
+      0.4, 0.5, 1, 0, 0, 0,
+      0, 1.5, 1, 0, 0, 0,
+      -0.4, 0.5, 1, 0, 0, 0,
+    ];
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -296,6 +311,8 @@ var GL;
       var PUPIL_MATRIX = LIBS.get_I4();
       var BADAN_MATRIX = LIBS.get_I4();
       var GRASS_MATRIX = LIBS.get_I4();
+      var MOUTH_MATRIX = LIBS.get_I4();
+      var SPIRAL_MATRIX  = LIBS.get_I4();
 
       var headModelMatrix = LIBS.get_I4();
     var legModelMatrix = LIBS.get_I4();
@@ -690,6 +707,10 @@ var GL;
       var RightPupil = new MyObject(rightPupil.vertex, rightPupil.faces, shader_vertex_source, shader_fragment_source); RightPupil.setup();
       var LeftPupil = new MyObject(leftPupil.vertex, leftPupil.faces, shader_vertex_source, shader_fragment_source); LeftPupil.setup();
       var Grass = new MyObject(grass.vertex, grass.faces, shader_vertex_source, shader_fragment_source); Grass.setup();
+      var Spiral = new MyObject(LIBS.buatKurva3D(SpiralPoints, 0.1).vertices, LIBS.buatKurva3D(SpiralPoints, 1).indices, shader_vertex_source, shader_fragment_source);
+      Spiral.setup();
+      var mouth = new MyObject(LIBS.buatKurva3D(mouthPoints, 0.1).vertices, LIBS.buatKurva3D(mouthPoints, 1).indices, shader_vertex_source, shader_fragment_source);
+      mouth.setup();
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
 
@@ -864,6 +885,25 @@ var GL;
             LIBS.translateZ(PUPIL_MATRIX, -2);
 
           }
+          
+          MOUTH_MATRIX = LIBS.get_I4();
+          LIBS.translateZ(MOUTH_MATRIX,0.5+Igglybuff_position[2]);
+          LIBS.translateY(MOUTH_MATRIX, 0.3);
+          LIBS.scale(MOUTH_MATRIX, 0.5,0.5,0.5);
+          if (goBack == true) {
+            LIBS.translateZ(MOUTH_MATRIX, -2);
+          }
+
+
+          SPIRAL_MATRIX = LIBS.get_I4();
+          LIBS.scale(SPIRAL_MATRIX, 0.3,0.3,0.5);
+          LIBS.translateY(SPIRAL_MATRIX, 1.3); LIBS.translateZ(SPIRAL_MATRIX, Igglybuff_position[2]+0.5);
+          LIBS.rotateX(SPIRAL_MATRIX,-120);
+          if (goBack == true) {
+            LIBS.translateZ(SPIRAL_MATRIX, -1);
+            LIBS.rotateX(SPIRAL_MATRIX, 35);
+            LIBS.translateY(SPIRAL_MATRIX, 0.4);
+          }
 
           //putar pada sumbu
 
@@ -946,6 +986,9 @@ var GL;
           RightPupil.MODEL_MATRIX=PUPIL_MATRIX; RightPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           LeftPupil.MODEL_MATRIX=PUPIL_MATRIX; LeftPupil.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Spiral.MODEL_MATRIX=SPIRAL_MATRIX ; Spiral.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          mouth.MODEL_MATRIX=MOUTH_MATRIX; mouth.render(VIEW_MATRIX, PROJECTION_MATRIX);
+
 
           if (goBack2 == false) {
             Stonjourner_position[2] += 0.1;
