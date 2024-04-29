@@ -296,6 +296,12 @@ var GL;
       0, 1.5, 1, 0, 0, 0,
       -0.4, 0.5, 1, 0, 0, 0,
     ];
+    var Wood = LIBS.generateTabung(0, 0, 0, 0.5, 10, 100, 1, 1, 1);
+    for (var i = 0; i < Wood.vertices.length; i+=6) {
+      Wood.vertices[i + 3] = 139/255; // Red component
+      Wood.vertices[i + 4] = 69/255; // Green component
+      Wood.vertices[i + 5] = 19/255; // Blue component
+    }
     
 
       var PROJECTION_MATRIX = LIBS.get_projection(40, CANVAS.width/CANVAS.height, 1,100);
@@ -313,6 +319,9 @@ var GL;
       var GRASS_MATRIX = LIBS.get_I4();
       var MOUTH_MATRIX = LIBS.get_I4();
       var SPIRAL_MATRIX  = LIBS.get_I4();
+      var BATANGPOHON1_MATRIX = LIBS.get_I4();
+      var BATANGPOHON2_MATRIX = LIBS.get_I4();
+
 
       var headModelMatrix = LIBS.get_I4();
     var legModelMatrix = LIBS.get_I4();
@@ -711,6 +720,8 @@ var GL;
       Spiral.setup();
       var mouth = new MyObject(LIBS.buatKurva3D(mouthPoints, 0.1).vertices, LIBS.buatKurva3D(mouthPoints, 1).indices, shader_vertex_source, shader_fragment_source);
       mouth.setup();
+      var Batang1 = new MyObject(Wood.vertices, Wood.faces, shader_vertex_source, shader_fragment_source);
+      Batang1.setup();
 
     var object = new MyObject(trapezoid, trapezoid_faces, shader_vertex_source, shader_fragment_source);object.setup();
 
@@ -833,8 +844,12 @@ var GL;
         LIBS.rotateX(VIEW_MATRIX, dY*0.01); LIBS.rotateY(VIEW_MATRIX, dX*0.01);
         LIBS.translateX(VIEW_MATRIX, 0); LIBS.translateY(VIEW_MATRIX,0); LIBS.translateZ(VIEW_MATRIX,-10);
 
+        BATANGPOHON1_MATRIX = LIBS.get_I4();
+        LIBS.translateY(BATANGPOHON1_MATRIX, 7); LIBS.translateX(BATANGPOHON1_MATRIX, 15); LIBS.translateZ(BATANGPOHON1_MATRIX, -10); 
+        LIBS.scale(BATANGPOHON1_MATRIX, 1, 2, 1);
+
         GRASS_MATRIX = LIBS.get_I4();
-        LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 100, 100, 100);
+        LIBS.translateY(GRASS_MATRIX, -0.5);LIBS.rotateX(GRASS_MATRIX, -Math.PI/2); LIBS.scale(GRASS_MATRIX, 40,40,40);
         if (goBack == false) {
           Igglybuff_position[2] += 0.01;
           if (Igglybuff_position[2] >= 10) {
@@ -989,6 +1004,7 @@ var GL;
           Grass.MODEL_MATRIX=GRASS_MATRIX; Grass.render(VIEW_MATRIX, PROJECTION_MATRIX);
           Spiral.MODEL_MATRIX=SPIRAL_MATRIX ; Spiral.render(VIEW_MATRIX, PROJECTION_MATRIX);
           mouth.MODEL_MATRIX=MOUTH_MATRIX; mouth.render(VIEW_MATRIX, PROJECTION_MATRIX);
+          Batang1.MODEL_MATRIX = BATANGPOHON1_MATRIX; Batang1.render(VIEW_MATRIX, PROJECTION_MATRIX);
 
 
           if (goBack2 == false) {

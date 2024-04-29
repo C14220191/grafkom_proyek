@@ -37,6 +37,48 @@ var LIBS = {
 
     return texture;
   },
+  generateTabung: function(x, y, z, radius, height, segments, ovalScaleX, ovalScaleY, ovalScaleZ) {
+    var vertices = [];
+    var colors = [];
+
+    var rainbowColors = [
+        [66 / 255, 132 / 255, 181 / 255] 
+    ];
+
+    for (var i = 0; i <= segments; i++) {
+        var angle = 2 * Math.PI * (i / segments);
+        var sinAngle = Math.sin(angle);
+        var cosAngle = Math.cos(angle);
+
+        for (var j = 0; j <= segments; j++) {
+            var heightFraction = j / segments;
+            var xCoord = radius * cosAngle * ovalScaleX;
+            var yCoord = height * heightFraction - height / 2 * ovalScaleY;
+            var zCoord = radius * sinAngle * ovalScaleZ;
+
+            var vertexX = x + xCoord;
+            var vertexY = y + yCoord;
+            var vertexZ = z + zCoord;
+
+            vertices.push(vertexX, vertexY, vertexZ);
+
+            var colorIndex = j % rainbowColors.length;
+            colors = colors.concat(rainbowColors[colorIndex]);
+        }
+    }
+
+    var faces = [];
+    for (var i = 0; i < segments; i++) {
+        for (var j = 0; j < segments; j++) {
+            var index = i * (segments + 1) + j;
+            var nextIndex = index + segments + 1;
+
+            faces.push(index, nextIndex, index + 1);
+            faces.push(nextIndex, nextIndex + 1, index + 1);
+        }
+    }
+    return { vertices: vertices, colors: colors, faces: faces };
+},
   generateBSpline:function(controlPoint, m, degree) {
     var curves = [];
     var knotVector = [];
