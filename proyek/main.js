@@ -142,6 +142,8 @@ var GL;
       var FRICTION = 0.95;
       var ScaleAwan = 0.5;
       var AwanS = true;
+      var DaunS = true;
+      var ScaleDaun = 0.5;
 
 
       var mouseDown = function(e){
@@ -1009,7 +1011,18 @@ var GL;
         WorldALPHA += pos_y * 2*Math.PI/CANVAS.height;
         WorldZ += pos_z * 2*Math.PI/CANVAS.height;
 
-        
+        if(DaunS == true){
+          ScaleDaun += 0.005;
+          if(ScaleDaun >= 1.5){
+            DaunS = false;
+          }
+        }else{
+          ScaleDaun -= 0.005;
+          if(ScaleDaun <= 0.5){
+            DaunS = true;
+          }
+        }
+
         LIBS.translateX(VIEW_MATRIX, pos_x); LIBS.translateY(VIEW_MATRIX, pos_y); LIBS.translateZ(VIEW_MATRIX, pos_z);
         
         LIBS.setPosition(VIEW_MATRIX,0,-12,-60)
@@ -1018,7 +1031,7 @@ var GL;
 
         DAUN1_MATRIX = LIBS.get_I4();
         LIBS.translateY(DAUN1_MATRIX, 12); LIBS.translateX(DAUN1_MATRIX, 12); LIBS.translateZ(DAUN1_MATRIX, -10);
-        LIBS.scale(DAUN1_MATRIX, 4, 10, 4);
+        LIBS.scale(DAUN1_MATRIX, 4+ScaleDaun, 10, 4);
         
         BATANG1_MATRIX = LIBS.get_I4();
         LIBS.translateY(BATANG1_MATRIX, 7); LIBS.translateX(BATANG1_MATRIX, 12); LIBS.translateZ(BATANG1_MATRIX, -10); 
@@ -1026,7 +1039,7 @@ var GL;
 
         DAUN2_MATRIX = LIBS.get_I4();
         LIBS.translateY(DAUN2_MATRIX, 12); LIBS.translateX(DAUN2_MATRIX, -22); LIBS.translateZ(DAUN2_MATRIX, -10);
-        LIBS.scale(DAUN2_MATRIX, 4, 10, 4);
+        LIBS.scale(DAUN2_MATRIX, 4+ScaleDaun, 10, 4);
 
         BATANG2_MATRIX = LIBS.get_I4();
         LIBS.translateY(BATANG2_MATRIX, 7); LIBS.translateX(BATANG2_MATRIX, -22); LIBS.translateZ(BATANG2_MATRIX, -10);
@@ -1171,14 +1184,14 @@ var GL;
           LIBS.translateZ(temp, -Igglybuff_position[2]);
 
           if (rotate1 == true) {
-            igglyLegLeftRotate -= rotatepeed;
-            if(igglyLegLeftRotate <= -0.35){
+            igglyLegLeftRotate -= 0.1;
+            if(igglyLegLeftRotate <= -0.5){
               rotate1 = false;
             }
           }
           else {
-            igglyLegLeftRotate += rotatepeed;
-            if(igglyLegLeftRotate >= 0.35){
+            igglyLegLeftRotate += 0.1;
+            if(igglyLegLeftRotate >= 0.5){
               rotate1 = true;
             }
           }
