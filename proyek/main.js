@@ -1151,10 +1151,14 @@ var GL;
 
           SPIRAL_MATRIX = LIBS.get_I4();
           LIBS.scale(SPIRAL_MATRIX, 0.3,0.3,0.5);
-          LIBS.translateY(SPIRAL_MATRIX, 1.3); LIBS.translateZ(SPIRAL_MATRIX, Igglybuff_position[2]+0.5);
-          LIBS.rotateX(SPIRAL_MATRIX,-120);
+          LIBS.translateZ(SPIRAL_MATRIX, Igglybuff_position[2]+0.5);
+          LIBS.translateX(SPIRAL_MATRIX, 1.1);
+          LIBS.translateY(SPIRAL_MATRIX, 0.7);
+          var temp = LIBS.get_I4();
+          LIBS.rotateZ(temp, 45);
+          SPIRAL_MATRIX = LIBS.multiply(SPIRAL_MATRIX, temp);
           if (goBack == true) {
-            LIBS.translateZ(SPIRAL_MATRIX, -1);
+            LIBS.translateZ(SPIRAL_MATRIX, -0.7);
             LIBS.rotateX(SPIRAL_MATRIX, 35);
             LIBS.translateY(SPIRAL_MATRIX, 0.4);
           }
