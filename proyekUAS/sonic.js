@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
 
 export class Sonic{
-    constructor(camera, controlle, scene, speed){
+    constructor(camera, scene, speed){
         this.camera = camera;
-        this.controlle = controlle;
+        // this.controller = controller;
         this.scene = scene;
         this.speed = speed;
         this.rotationVector = new THREE.Vector3();
@@ -20,7 +20,7 @@ export class Sonic{
         var loader = new FBXLoader();
         loader.setPath('./resources/');
         loader.load('Looking Around.fbx', (fbx) => {
-            fbx.scale.setScalar(0.1);
+            fbx.scale.setScalar(0.01);
             fbx.traverse(c => {
                 c.castShadow = true;
                 c.receiveShadow = true;
@@ -44,6 +44,7 @@ export class Sonic{
             loader.load('Running.fbx', (fbx) => {onLoad('start', fbx)});
         });
     }
+    update(dt){}
 }
 
 export class ThirdPersonCamera{
