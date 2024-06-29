@@ -11,7 +11,7 @@ class Main {
             antialias: true,
             canvas: canvasReference});
         this.renderer.setSize(window.innerWidth, window.innerHeight);
-        this.renderer.clearColor(0x000000,1);
+        this.renderer.setClearColor(0xffffff,1);
         this.renderer.shadowMap.enabled = true;
 
 
