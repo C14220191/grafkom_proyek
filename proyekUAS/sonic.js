@@ -21,6 +21,8 @@ export class Sonic{
         loader.setPath('./resources/');
         loader.load('Looking Around.fbx', (fbx) => {
             fbx.scale.setScalar(0.01);
+            fbx.rotateY(Math.PI);
+            fbx.position.set(0,0,10);
             fbx.traverse(c => {
                 c.castShadow = true;
                 c.receiveShadow = true;
@@ -52,7 +54,7 @@ export class Sonic{
         }if (this.controller.keys['right']){
             direction.z = 5;
         }
-
+        // direction.x = 1;
         if(direction.length()== 0){
             if(this.animations['idle']){
                 if(this.state != 'idle'){
@@ -72,6 +74,15 @@ export class Sonic{
                 this.mixer.update(dt);
             }
         }
+        var fowardVector = new THREE.Vector3(1,0,0);
+        var rightVector = new THREE.Vector3(0,0,1);
+        fowardVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.rotationVector.y);
+        rightVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.rotationVector.y);
+
+        this.mesh.position.add(fowardVector.multiplyScalar(direction.x * this.speed * dt));
+        this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
+
+        this.camera.setup(this.mesh.position, this.rotationVector);
     }
 }
 
@@ -132,6 +143,5 @@ export class ThirdPersonCamera{
         temp = new THREE.Vector3();
         temp.addVectors(target, this.targetOffset);
         this.camera.lookAt(temp);
-
     }
 }

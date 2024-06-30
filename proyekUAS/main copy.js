@@ -25,18 +25,30 @@ class Main {
         plane.receiveShadow = true;
         plane.castShadow = true;
 
+
+        var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
+        hemiLight.position.set(0, 20, 0);
+        this.scene.add(hemiLight);
+        var hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 1);
+        this.scene.add(hemiLightHelper);
+
         //directional light
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
         directionalLight.position.set(3,10,10);
         directionalLight.castShadow = true;
+        var directionalShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+        this.scene.add(directionalShadowHelper);
+        var directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
+        this.scene.add(directionalLightHelper);
         this.scene.add(directionalLight);
+
 
         this.Sonic = new Sonic(
             new ThirdPersonCamera(
                 this.camera, new THREE.Vector3(-5,5,0), new THREE.Vector3(0,0,0)),
             new SonicController,
             this.scene,
-            0.01
+            1
         )
     }
 
