@@ -2,9 +2,9 @@ import * as THREE from 'three';
 import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
 
 export class Sonic{
-    constructor(camera, scene, speed){
+    constructor(camera,controller, scene, speed){
         this.camera = camera;
-        // this.controller = controller;
+        this.controller = controller;
         this.scene = scene;
         this.speed = speed;
         this.rotationVector = new THREE.Vector3();
@@ -44,7 +44,73 @@ export class Sonic{
             loader.load('Running.fbx', (fbx) => {onLoad('start', fbx)});
         });
     }
-    update(dt){}
+    update(dt){
+        if (!this.mesh) return;
+        var direction = new THREE.Vector3(0,0,0);
+        if (this.controller.keys['left']){
+            direction.z = -5;
+        }if (this.controller.keys['right']){
+            direction.z = 5;
+        }
+
+        if(direction.length()== 0){
+            if(this.animations['idle']){
+                if(this.state != 'idle'){
+                    this.mixer.stopAllAction();
+                    this.state = 'idle';
+                }
+                this.mixer.clipAction(this.animations['idle'].clip).play();
+                this.mixer.update(dt);
+            }
+        }else{
+            if(this.animations['start']){
+                if(this.state != 'start'){
+                    this.mixer.stopAllAction();
+                    this.state = 'start';
+                }
+                this.mixer.clipAction(this.animations['start'].clip).play();
+                this.mixer.update(dt);
+            }
+        }
+    }
+}
+
+
+export class SonicController{
+    constructor(){
+        this.keys = {
+            "left": false,
+            "right": false
+        };
+
+        document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
+        document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+    }
+
+    onKeyDown(event){
+        switch(event.key){
+            case 'a':
+            case 'A':
+                this.keys.left = true;
+                break;
+            case 'd':
+            case 'D':
+                this.keys.right = true;
+                break;
+        }
+    }
+    onKeyUp(event){
+        switch(event.key){
+            case 'a':
+            case 'A':
+                this.keys.left = false;
+                break;
+            case 'd':
+            case 'D':
+                this.keys.right = false;
+                break;
+        }
+    }
 }
 
 export class ThirdPersonCamera{

@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import {Sonic, ThirdPersonCamera} from './sonic.js';
+import {Sonic,SonicController, ThirdPersonCamera} from './sonic.js';
 
 
 class Main {
@@ -26,7 +26,7 @@ class Main {
         plane.castShadow = true;
 
         //directional light
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 0.5);
         directionalLight.position.set(3,10,10);
         directionalLight.castShadow = true;
         this.scene.add(directionalLight);
@@ -34,8 +34,9 @@ class Main {
         this.Sonic = new Sonic(
             new ThirdPersonCamera(
                 this.camera, new THREE.Vector3(-5,5,0), new THREE.Vector3(0,0,0)),
+            new SonicController,
             this.scene,
-            10,
+            10
         )
     }
 
