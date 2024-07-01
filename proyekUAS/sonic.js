@@ -46,29 +46,34 @@ export class Sonic{
             loader.load('Running.fbx', (fbx) => {onLoad('start', fbx)});
         });
     }
-    update(dt){
+    update(dt) {
         if (!this.mesh) return;
-        var direction = new THREE.Vector3(0,0,0);
-        if (this.controller.keys['left']){
+        var direction = new THREE.Vector3(0, 0, 0);
+        var tilt = 0; 
+        const maxTilt = Math.PI / 6; // Maximum tilt angle (30 degrees)
+        const tiltSpeed = 0.05; 
+    
+        if (this.controller.keys['left']) {
             direction.z = -5;
-            this.rotationVector.y += 0.1;
-        }if (this.controller.keys['right']){
+            tilt = -tiltSpeed; // Tilt to the left
+        }
+        if (this.controller.keys['right']) {
             direction.z = 5;
-            this.rotationVector.y -= 0.1;
+            tilt = tiltSpeed; // Tilt to the right
         }
         direction.x = 1;
-        if(direction.length()== 0){
-            if(this.animations['idle']){
-                if(this.state != 'idle'){
+        if (direction.length() == 0) {
+            if (this.animations['idle']) {
+                if (this.state != 'idle') {
                     this.mixer.stopAllAction();
                     this.state = 'idle';
                 }
                 this.mixer.clipAction(this.animations['idle'].clip).play();
                 this.mixer.update(dt);
             }
-        }else{
-            if(this.animations['start']){
-                if(this.state != 'start'){
+        } else {
+            if (this.animations['start']) {
+                if (this.state != 'start') {
                     this.mixer.stopAllAction();
                     this.state = 'start';
                 }
@@ -76,30 +81,45 @@ export class Sonic{
                 this.mixer.update(dt);
             }
         }
-        var fowardVector = new THREE.Vector3(1,0,0);
-        var rightVector = new THREE.Vector3(0,0,1);
-        fowardVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.rotationVector.y);
-        rightVector.applyAxisAngle(new THREE.Vector3(0,1,0), this.rotationVector.y);
-
-        this.mesh.position.add(fowardVector.multiplyScalar(direction.x * this.speed * dt));
+        var forwardVector = new THREE.Vector3(1, 0, 0);
+        var rightVector = new THREE.Vector3(0, 0, 1);
+        forwardVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
+        rightVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
+    
+        this.mesh.position.add(forwardVector.multiplyScalar(direction.x * this.speed * dt));
         this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
-
-        this.camera.setup(this.mesh.position, this.rotationVector);
+    
+        this.mesh.rotation.y += tilt;
+        this.mesh.rotation.y = Math.max(-maxTilt, Math.min(maxTilt, this.mesh.rotation.y));
+    
+        if (!this.controller.keys['left'] && !this.controller.keys['right']) {
+            if (this.mesh.rotation.y > 0) {
+                this.mesh.rotation.y -= tiltSpeed;
+                if (this.mesh.rotation.y < 0) {
+                    this.mesh.rotation.y = 0;
+                }
+            } else if (this.mesh.rotation.y < 0) {
+                this.mesh.rotation.y += tiltSpeed;
+                if (this.mesh.rotation.y > 0) {
+                    this.mesh.rotation.y = 0;
+                }
+            }
+        }
+    
+        this.camera.setup(this.mesh.position, new THREE.Vector3(0, 1.5, 0)); // Set angle to zero
     }
-}
+}       
 
 
 export class SonicController{
     constructor(){
         this.keys = {
             "left": false,
-            "right": false,
-            "space": false
+            "right": false
         };
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
-        document.addEventListener('space', (e) => this.onMouseDown(e), false);
     }
 
     onKeyDown(event){
@@ -112,9 +132,6 @@ export class SonicController{
             case 'D':
                 this.keys.right = true;
                 break;
-            case ' ':
-                this.keys.space = true;
-                break;
         }
     }
     onKeyUp(event){
@@ -126,9 +143,6 @@ export class SonicController{
             case 'd':
             case 'D':
                 this.keys.right = false;
-                break;
-            case ' ':
-                this.keys.space = false;
                 break;
         }
     }
