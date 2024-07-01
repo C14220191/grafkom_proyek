@@ -54,7 +54,7 @@ export class Sonic{
         }if (this.controller.keys['right']){
             direction.z = 5;
         }
-        // direction.x = 1;
+        direction.x = 1;
         if(direction.length()== 0){
             if(this.animations['idle']){
                 if(this.state != 'idle'){
