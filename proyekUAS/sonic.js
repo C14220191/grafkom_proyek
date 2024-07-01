@@ -51,8 +51,10 @@ export class Sonic{
         var direction = new THREE.Vector3(0,0,0);
         if (this.controller.keys['left']){
             direction.z = -5;
+            this.rotationVector.y += 0.1;
         }if (this.controller.keys['right']){
             direction.z = 5;
+            this.rotationVector.y -= 0.1;
         }
         direction.x = 1;
         if(direction.length()== 0){
@@ -91,11 +93,13 @@ export class SonicController{
     constructor(){
         this.keys = {
             "left": false,
-            "right": false
+            "right": false,
+            "space": false
         };
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+        document.addEventListener('space', (e) => this.onMouseDown(e), false);
     }
 
     onKeyDown(event){
@@ -108,6 +112,9 @@ export class SonicController{
             case 'D':
                 this.keys.right = true;
                 break;
+            case ' ':
+                this.keys.space = true;
+                break;
         }
     }
     onKeyUp(event){
@@ -119,6 +126,9 @@ export class SonicController{
             case 'd':
             case 'D':
                 this.keys.right = false;
+                break;
+            case ' ':
+                this.keys.space = false;
                 break;
         }
     }
