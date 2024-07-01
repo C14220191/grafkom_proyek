@@ -13,6 +13,7 @@ class Main {
         this.renderer.setSize(window.innerWidth, window.innerHeight);
         this.renderer.setClearColor(0xffffff, 1);
         this.renderer.shadowMap.enabled = true;
+        this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
 
         // Plane
         this.planeSize = 30; // Store the plane size for boundary checks
@@ -24,28 +25,35 @@ class Main {
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
 
-        // Directional light
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 1); // Increase the intensity
-        directionalLight.position.set(0, 20, 0);
+        var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
+        hemiLight.position.set(0, 20, 0);
+        this.scene.add(hemiLight);
+        var hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 1);
+        this.scene.add(hemiLightHelper);
+
+        // Directional light for shadows
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        directionalLight.position.set(3, 10, 10);
         directionalLight.castShadow = true;
-        directionalLight.shadow.camera.left = -this.planeSize / 2;
-        directionalLight.shadow.camera.right = this.planeSize / 2;
-        directionalLight.shadow.camera.top = this.planeSize / 2;
-        directionalLight.shadow.camera.bottom = -this.planeSize / 2;
-        directionalLight.shadow.camera.near = 0.1;
-        directionalLight.shadow.camera.far = 100;
-        directionalLight.shadow.mapSize.width = 1024;
-        directionalLight.shadow.mapSize.height = 1024;
+
+        // Adjust shadow settings
+        directionalLight.shadow.mapSize.width = 1024; // Optional: increase shadow map size
+        directionalLight.shadow.mapSize.height = 1024; // Optional: increase shadow map size
+
+        // Set up shadow camera frustum
+        var d = 15;
+        directionalLight.shadow.camera.left = -d;
+        directionalLight.shadow.camera.right = d;
+        directionalLight.shadow.camera.top = d;
+        directionalLight.shadow.camera.bottom = -d;
+
+        var directionalShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+        this.scene.add(directionalShadowHelper);
+        var directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
+        this.scene.add(directionalLightHelper);
         this.scene.add(directionalLight);
 
-        // Ambient light
-        var ambientLight = new THREE.AmbientLight(0xffffff, 0.5); // Add ambient light with half intensity
-        this.scene.add(ambientLight);
-
-        // Camera helper for debugging
-        var helper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        this.scene.add(helper);
-
+        // Set up Sonic
         this.Sonic = new Sonic(
             new ThirdPersonCamera(
                 this.camera, new THREE.Vector3(-5, 5, 0), new THREE.Vector3(0, 0, 0)),
@@ -54,6 +62,11 @@ class Main {
             1 // Adjust speed as necessary
         );
 
+        // Add a light specifically for Sonic
+        this.sonicLight = new THREE.PointLight(0xffffff, 7, 50); // Bright white light
+        // this.sonicLight.castShadow = true;
+        this.scene.add(this.sonicLight);
+
         // Add event listener for zooming
         window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
     }
@@ -61,6 +74,16 @@ class Main {
     static render(dt) {
         this.checkBoundaries(dt);
         this.Sonic.update(dt);
+
+        // Update the position of the light to follow Sonic
+        if (this.Sonic.mesh) {
+            this.sonicLight.position.set(
+                this.Sonic.mesh.position.x,
+                this.Sonic.mesh.position.y + 1.5, // Slightly above Sonic
+                this.Sonic.mesh.position.z
+            );
+        }
+
         this.renderer.render(this.scene, this.camera);
     }
 
