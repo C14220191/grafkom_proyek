@@ -173,3 +173,24 @@ export class ThirdPersonCamera {
         this.positionOffset.copy(newOffset);
     }
 }
+
+export class FirstPersonCamera {
+    constructor(camera, targetOffset) {
+        this.camera = camera;
+        this.targetOffset = targetOffset;
+    }
+
+    setup(target, angle) {
+        var temp = new THREE.Vector3();
+        temp.copy(this.targetOffset);
+        temp.applyAxisAngle(new THREE.Vector3(0, 1, 0), angle.y);
+
+        temp.addVectors(target, temp);
+        this.camera.position.copy(temp);
+
+        temp = new THREE.Vector3();
+        temp.addVectors(target, new THREE.Vector3(0, 1.5, 0)); // Offset for head height
+        this.camera.lookAt(temp);
+    }
+}
+

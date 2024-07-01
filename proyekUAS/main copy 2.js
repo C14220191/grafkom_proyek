@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera } from './sonic.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera } from './sonic.js';
 
 class Main {
     static init() {
@@ -18,7 +18,7 @@ class Main {
         // Plane
         this.planeSize = 30; // Store the plane size for boundary checks
         var plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(this.planeSize, this.planeSize),
+            new THREE.PlaneGeometry(1, this.planeSize),
             new THREE.MeshPhongMaterial({ color: 0xcbcbcb })
         );
         this.scene.add(plane);
@@ -54,9 +54,17 @@ class Main {
         this.scene.add(directionalLight);
 
         // Set up Sonic
-        this.Sonic = new Sonic(
-            new ThirdPersonCamera(
-                this.camera, new THREE.Vector3(-5, 5, 0), new THREE.Vector3(0, 0, 0)),
+        // this.SonicTPP = new Sonic(
+        //     new ThirdPersonCamera(
+        //         this.camera, new THREE.Vector3(-3, 2, 0), new THREE.Vector3(0, 0, 0)),
+        //     new SonicController(),
+        //     this.scene,
+        //     1 // Adjust speed as necessary
+        // );
+
+        this.SonicTPP = new Sonic(
+            new FirstPersonCamera(
+                this.camera, new THREE.Vector3(-0.5, 1.5, 0)), // Offset untuk ketinggian kepala
             new SonicController(),
             this.scene,
             1 // Adjust speed as necessary
@@ -73,14 +81,14 @@ class Main {
     
     static render(dt) {
         this.checkBoundaries(dt);
-        this.Sonic.update(dt);
+        this.SonicTPP.update(dt);
 
         // Update the position of the light to follow Sonic
-        if (this.Sonic.mesh) {
+        if (this.SonicTPP.mesh) {
             this.sonicLight.position.set(
-                this.Sonic.mesh.position.x,
-                this.Sonic.mesh.position.y + 1.5, // Slightly above Sonic
-                this.Sonic.mesh.position.z
+                this.SonicTPP.mesh.position.x,
+                this.SonicTPP.mesh.position.y + 1.5, // Slightly above SonicTPP
+                this.SonicTPP.mesh.position.z
             );
         }
 
@@ -88,10 +96,10 @@ class Main {
     }
 
     static checkBoundaries(dt) {
-        if (!this.Sonic.mesh) return;
+        if (!this.SonicTPP.mesh) return;
 
-        var position = this.Sonic.mesh.position;
-        var speed = this.Sonic.speed * dt;
+        var position = this.SonicTPP.mesh.position;
+        var speed = this.SonicTPP.speed * dt;
 
         // Define the boundaries
         var halfSize = this.planeSize / 2;
@@ -102,15 +110,15 @@ class Main {
 
         // Adjust the speed based on the boundaries
         if (position.x < minX) {
-            this.Sonic.mesh.position.x = minX;
+            this.SonicTPP.mesh.position.x = minX;
         } else if (position.x > maxX) {
-            this.Sonic.mesh.position.x = maxX;
+            this.SonicTPP.mesh.position.x = maxX;
         }
 
         if (position.z < minZ) {
-            this.Sonic.mesh.position.z = minZ;
+            this.SonicTPP.mesh.position.z = minZ;
         } else if (position.z > maxZ) {
-            this.Sonic.mesh.position.z = maxZ;
+            this.SonicTPP.mesh.position.z = maxZ;
         }
     }
 
