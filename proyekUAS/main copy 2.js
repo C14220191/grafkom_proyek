@@ -66,11 +66,11 @@ class Main {
         this.sonicLight = new THREE.PointLight(0xffffff, 7, 50); // Bright white light
         // this.sonicLight.castShadow = true;
         this.scene.add(this.sonicLight);
-
         // Add event listener for zooming
         window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
-    }
 
+    }
+    
     static render(dt) {
         this.checkBoundaries(dt);
         this.Sonic.update(dt);
