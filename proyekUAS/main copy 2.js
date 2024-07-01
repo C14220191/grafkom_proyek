@@ -54,17 +54,17 @@ class Main {
         this.scene.add(directionalLight);
 
         // Set up Sonic
-        // this.SonicTPP = new Sonic(
-        //     new ThirdPersonCamera(
-        //         this.camera, new THREE.Vector3(-3, 2, 0), new THREE.Vector3(0, 0, 0)),
-        //     new SonicController(),
-        //     this.scene,
-        //     1 // Adjust speed as necessary
-        // );
+        this.firstPersonCamera = new FirstPersonCamera(
+            this.camera, new THREE.Vector3(-0.5, 1.5, 0) // Offset for head height
+        );
+        this.thirdPersonCamera = new ThirdPersonCamera(
+            this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
+        );
+
+        this.currentCamera = this.firstPersonCamera;
 
         this.SonicTPP = new Sonic(
-            new FirstPersonCamera(
-                this.camera, new THREE.Vector3(-0.5, 1.5, 0)), // Offset untuk ketinggian kepala
+            this.currentCamera,
             new SonicController(),
             this.scene,
             1 // Adjust speed as necessary
@@ -72,11 +72,11 @@ class Main {
 
         // Add a light specifically for Sonic
         this.sonicLight = new THREE.PointLight(0xffffff, 7, 50); // Bright white light
-        // this.sonicLight.castShadow = true;
         this.scene.add(this.sonicLight);
-        // Add event listener for zooming
-        window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
 
+        // Add event listeners for zooming and switching cameras
+        window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
+        window.addEventListener('keydown', this.onKeyDown.bind(this), false);
     }
     
     static render(dt) {
@@ -129,6 +129,17 @@ class Main {
             this.camera.fov = Math.max(30, this.camera.fov - 1);
         }
         this.camera.updateProjectionMatrix();
+    }
+
+    static onKeyDown(event) {
+        if (event.key === 'c') { // 'c' key to switch camera
+            if (this.currentCamera instanceof FirstPersonCamera) {
+                this.currentCamera = this.thirdPersonCamera;
+            } else {
+                this.currentCamera = this.firstPersonCamera;
+            }
+            this.SonicTPP.camera = this.currentCamera; // Update Sonic's camera directly
+        }
     }
 }
 
