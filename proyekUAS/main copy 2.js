@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera } from './sonic.js';
-
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 class Main {
     static init() {
         var canvasReference = document.getElementById("canvas");
@@ -18,7 +18,7 @@ class Main {
         // Plane
         this.planeSize = 30; // Store the plane size for boundary checks
         var plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(1, this.planeSize),
+            new THREE.PlaneGeometry(this.planeSize, this.planeSize),
             new THREE.MeshPhongMaterial({ color: 0xcbcbcb })
         );
         this.scene.add(plane);
@@ -61,9 +61,9 @@ class Main {
             this.camera, new THREE.Vector3(-2, 2, 0.15), new THREE.Vector3(0, 0, 0)
         );
 
-        this.currentCamera = this.firstPersonCamera;
+        this.currentCamera = this.thirdPersonCamera;
 
-        this.SonicTPP = new Sonic(
+        this.sonic = new Sonic(
             this.currentCamera,
             new SonicController(),
             this.scene,
@@ -78,17 +78,17 @@ class Main {
         window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
         window.addEventListener('keydown', this.onKeyDown.bind(this), false);
     }
-    
+
     static render(dt) {
         this.checkBoundaries(dt);
-        this.SonicTPP.update(dt);
+        this.sonic.update(dt);
 
         // Update the position of the light to follow Sonic
-        if (this.SonicTPP.mesh) {
+        if (this.sonic.mesh) {
             this.sonicLight.position.set(
-                this.SonicTPP.mesh.position.x,
-                this.SonicTPP.mesh.position.y + 1.5, // Slightly above SonicTPP
-                this.SonicTPP.mesh.position.z
+                this.sonic.mesh.position.x,
+                this.sonic.mesh.position.y + 1.5, // Slightly above sonic
+                this.sonic.mesh.position.z
             );
         }
 
@@ -96,10 +96,10 @@ class Main {
     }
 
     static checkBoundaries(dt) {
-        if (!this.SonicTPP.mesh) return;
+        if (!this.sonic.mesh) return;
 
-        var position = this.SonicTPP.mesh.position;
-        var speed = this.SonicTPP.speed * dt;
+        var position = this.sonic.mesh.position;
+        var speed = this.sonic.speed * dt;
 
         // Define the boundaries
         var halfSize = this.planeSize / 2;
@@ -110,15 +110,15 @@ class Main {
 
         // Adjust the speed based on the boundaries
         if (position.x < minX) {
-            this.SonicTPP.mesh.position.x = minX;
+            this.sonic.mesh.position.x = minX;
         } else if (position.x > maxX) {
-            this.SonicTPP.mesh.position.x = maxX;
+            this.sonic.mesh.position.x = maxX;
         }
 
         if (position.z < minZ) {
-            this.SonicTPP.mesh.position.z = minZ;
+            this.sonic.mesh.position.z = minZ;
         } else if (position.z > maxZ) {
-            this.SonicTPP.mesh.position.z = maxZ;
+            this.sonic.mesh.position.z = maxZ;
         }
     }
 
@@ -138,7 +138,11 @@ class Main {
             } else {
                 this.currentCamera = this.firstPersonCamera;
             }
-            this.SonicTPP.camera = this.currentCamera; // Update Sonic's camera directly
+            this.sonic.camera = this.currentCamera; // Update Sonic's camera directly
+        }
+        if (event.key === ' ') {
+            this.sonic.startMoving();
+            status = 'on';
         }
     }
 }
