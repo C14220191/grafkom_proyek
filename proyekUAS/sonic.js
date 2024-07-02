@@ -1,7 +1,7 @@
 import * as THREE from 'three';
-import {FBXLoader} from 'three/addons/loaders/FBXLoader.js';
+import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 
-export class Sonic{
+export class Sonic {
     constructor(camera, controller, scene, speed) {
         this.camera = camera;
         this.controller = controller;
@@ -47,6 +47,10 @@ export class Sonic{
         });
     }
 
+    startMoving() {
+        this.state = 'start';
+    }
+
     update(dt) {
         if (!this.mesh) return;
         var direction = new THREE.Vector3(0, 0, 0);
@@ -54,34 +58,46 @@ export class Sonic{
         const maxTilt = Math.PI / 6; // Maximum tilt angle (30 degrees)
         const tiltSpeed = 0.05;
 
-        if (this.controller.keys['left']) {
-            direction.z = -5;
-            tilt = -tiltSpeed; // Tilt to the left
-        }
-        if (this.controller.keys['right']) {
-            direction.z = 5;
-            tilt = tiltSpeed; // Tilt to the right
-        }
-        direction.x = 1;
-        if (direction.length() == 0) {
+        if (this.state === 'idle') {
             if (this.animations['idle']) {
-                if (this.state != 'idle') {
+                if (!this.animations['idle'].action.isRunning()) {
                     this.mixer.stopAllAction();
-                    this.state = 'idle';
+                    this.animations['idle'].action.play();
                 }
-                this.mixer.clipAction(this.animations['idle'].clip).play();
                 this.mixer.update(dt);
             }
-        } else {
+        } else if (this.state === 'start') {
+            direction.x = 1; // Only move forward if in 'start' state
             if (this.animations['start']) {
-                if (this.state != 'start') {
+                if (!this.animations['start'].action.isRunning()) {
                     this.mixer.stopAllAction();
-                    this.state = 'start';
+                    this.animations['start'].action.play();
                 }
-                this.mixer.clipAction(this.animations['start'].clip).play();
                 this.mixer.update(dt);
+            }
+            if (this.controller.keys['left']) {
+                direction.z = -5;
+                tilt = -tiltSpeed; // Tilt to the left
+            }
+            if (this.controller.keys['right']) {
+                direction.z = 5;
+                tilt = tiltSpeed; // Tilt to the right
+            }
+            if (!this.controller.keys['left'] && !this.controller.keys['right']) {
+                if (this.mesh.rotation.y > 0) {
+                    this.mesh.rotation.y -= tiltSpeed;
+                    if (this.mesh.rotation.y < 0) {
+                        this.mesh.rotation.y = 0;
+                    }
+                } else if (this.mesh.rotation.y < 0) {
+                    this.mesh.rotation.y += tiltSpeed;
+                    if (this.mesh.rotation.y > 0) {
+                        this.mesh.rotation.y = 0;
+                    }
+                }
             }
         }
+
         var forwardVector = new THREE.Vector3(1, 0, 0);
         var rightVector = new THREE.Vector3(0, 0, 1);
         forwardVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
@@ -92,20 +108,6 @@ export class Sonic{
 
         this.mesh.rotation.y += tilt;
         this.mesh.rotation.y = Math.max(-maxTilt, Math.min(maxTilt, this.mesh.rotation.y));
-
-        if (!this.controller.keys['left'] && !this.controller.keys['right']) {
-            if (this.mesh.rotation.y > 0) {
-                this.mesh.rotation.y -= tiltSpeed;
-                if (this.mesh.rotation.y < 0) {
-                    this.mesh.rotation.y = 0;
-                }
-            } else if (this.mesh.rotation.y < 0) {
-                this.mesh.rotation.y += tiltSpeed;
-                if (this.mesh.rotation.y > 0) {
-                    this.mesh.rotation.y = 0;
-                }
-            }
-        }
 
         this.camera.setup(this.mesh.position, new THREE.Vector3(0, 1.5, 0)); // Set angle to zero
     }
@@ -134,6 +136,7 @@ export class SonicController {
                 break;
         }
     }
+
     onKeyUp(event) {
         switch (event.key) {
             case 'a':
@@ -193,4 +196,3 @@ export class FirstPersonCamera {
         this.camera.lookAt(temp);
     }
 }
-
