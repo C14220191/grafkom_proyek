@@ -1,6 +1,6 @@
 import * as THREE from 'three';
 import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera } from './sonic.js';
-
+import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
 class Main {
     static init() {
         var canvasReference = document.getElementById("canvas");
@@ -78,7 +78,7 @@ class Main {
         window.addEventListener('wheel', this.onMouseWheel.bind(this), false);
         window.addEventListener('keydown', this.onKeyDown.bind(this), false);
     }
-    
+
     static render(dt) {
         this.checkBoundaries(dt);
         this.sonic.update(dt);
@@ -142,6 +142,7 @@ class Main {
         }
         if (event.key === ' ') {
             this.sonic.startMoving();
+            status = 'on';
         }
     }
 }
