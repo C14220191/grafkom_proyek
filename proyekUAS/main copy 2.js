@@ -58,7 +58,7 @@ class Main {
             this.camera, new THREE.Vector3(-0.5, 1.5, 0) // Offset for head height
         );
         this.thirdPersonCamera = new ThirdPersonCamera(
-            this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
+            this.camera, new THREE.Vector3(-2, 2, 0.15), new THREE.Vector3(0, 0, 0)
         );
 
         this.currentCamera = this.firstPersonCamera;
