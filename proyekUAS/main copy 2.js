@@ -1,6 +1,8 @@
 import * as THREE from 'three';
 import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera } from './sonic.js';
 import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+
 class Main {
     static init() {
         var canvasReference = document.getElementById("canvas");
@@ -25,6 +27,7 @@ class Main {
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
 
+    
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
         this.scene.add(hemiLight);
