@@ -26,8 +26,8 @@ class Main {
                     object.castShadow = true;
                     object.receiveShadow = true;
                 }
-                gltf.scene.position.set(-9.5, -4.5, 2)
-                this.scene.add(gltf.scene)
+                gltf.scene.position.set(-9.5, -4.5, 2);
+                this.scene.add(gltf.scene);
             });
         }, undefined, (error) => {
             console.error('An error happened', error);
@@ -52,13 +52,14 @@ class Main {
         this.scene.add(hemiLightHelper);
 
         // Directional light for shadows
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Increase intensity
         directionalLight.position.set(3, 10, 10);
         directionalLight.castShadow = true;
 
         // Adjust shadow settings
-        directionalLight.shadow.mapSize.width = 1024; // Optional: increase shadow map size
-        directionalLight.shadow.mapSize.height = 1024; // Optional: increase shadow map size
+        directionalLight.shadow.mapSize.width = 2048; // Increase shadow map size
+        directionalLight.shadow.mapSize.height = 2048; // Increase shadow map size
+        directionalLight.shadow.bias = -0.00005; // Reduce shadow acne
 
         // Set up shadow camera frustum
         var d = 15;
