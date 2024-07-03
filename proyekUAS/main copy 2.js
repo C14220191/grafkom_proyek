@@ -1,7 +1,6 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera } from './sonic.js';
-import {OrbitControls} from 'three/addons/controls/OrbitControls.js';
-import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 class Main {
     static init() {
@@ -27,7 +26,6 @@ class Main {
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
 
-    
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
         this.scene.add(hemiLight);
@@ -61,8 +59,9 @@ class Main {
             this.camera, new THREE.Vector3(-0.5, 1.5, 0) // Offset for head height
         );
         this.thirdPersonCamera = new ThirdPersonCamera(
-            this.camera, new THREE.Vector3(-2, 2, 0.15), new THREE.Vector3(0, 0, 0)
+            this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
+        this.freeRoamCamera = new FreeRoamCamera(this.camera, 5); // Speed set to 5 for FreeRoamCamera
 
         this.currentCamera = this.thirdPersonCamera;
 
@@ -93,6 +92,11 @@ class Main {
                 this.sonic.mesh.position.y + 1.5, // Slightly above sonic
                 this.sonic.mesh.position.z
             );
+        }
+
+        // Update camera if it's a FreeRoamCamera
+        if (this.currentCamera instanceof FreeRoamCamera) {
+            this.currentCamera.update(dt);
         }
 
         this.renderer.render(this.scene, this.camera);
@@ -138,6 +142,8 @@ class Main {
         if (event.key === 'c') { // 'c' key to switch camera
             if (this.currentCamera instanceof FirstPersonCamera) {
                 this.currentCamera = this.thirdPersonCamera;
+            } else if (this.currentCamera instanceof ThirdPersonCamera) {
+                this.currentCamera = this.freeRoamCamera;
             } else {
                 this.currentCamera = this.firstPersonCamera;
             }

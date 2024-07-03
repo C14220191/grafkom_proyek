@@ -12,7 +12,9 @@ export class Sonic {
         this.state = 'idle';
         this.animations = {};
 
-        this.camera.setup(new THREE.Vector3(0, 0, 0), this.rotationVector);
+        if (this.camera.setup) {
+            this.camera.setup(new THREE.Vector3(0, 0, 0), this.rotationVector);
+        }
         this.loadModel();
     }
 
@@ -194,5 +196,89 @@ export class FirstPersonCamera {
         temp = new THREE.Vector3();
         temp.addVectors(target, new THREE.Vector3(0, 1.5, 0)); // Offset for head height
         this.camera.lookAt(temp);
+    }
+}
+
+export class FreeRoamCamera {
+    constructor(camera, speed) {
+        this.camera = camera;
+        this.speed = speed;
+        this.direction = new THREE.Vector3();
+        this.keys = {
+            forward: false,
+            backward: false,
+            left: false,
+            right: false,
+            up: false,
+            down: false
+        };
+
+        document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
+        document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
+    }
+
+    setup(target, angle) {
+        // No setup needed for FreeRoamCamera, but keep the method to avoid errors
+    }
+
+    update(dt) {
+        const speed = this.speed * dt;
+        if (this.keys.forward) this.direction.z = -speed;
+        if (this.keys.backward) this.direction.z = speed;
+        if (this.keys.left) this.direction.x = -speed;
+        if (this.keys.right) this.direction.x = speed;
+        if (this.keys.up) this.direction.y = speed;
+        if (this.keys.down) this.direction.y = -speed;
+
+        this.camera.position.add(this.direction);
+
+        // Reset direction for the next frame
+        this.direction.set(0, 0, 0);
+    }
+
+    onKeyDown(event) {
+        switch (event.key) {
+            case 'w':
+                this.keys.forward = true;
+                break;
+            case 's':
+                this.keys.backward = true;
+                break;
+            case 'a':
+                this.keys.left = true;
+                break;
+            case 'd':
+                this.keys.right = true;
+                break;
+            case 'q':
+                this.keys.up = true;
+                break;
+            case 'e':
+                this.keys.down = true;
+                break;
+        }
+    }
+
+    onKeyUp(event) {
+        switch (event.key) {
+            case 'w':
+                this.keys.forward = false;
+                break;
+            case 's':
+                this.keys.backward = false;
+                break;
+            case 'a':
+                this.keys.left = false;
+                break;
+            case 'd':
+                this.keys.right = false;
+                break;
+            case 'q':
+                this.keys.up = false;
+                break;
+            case 'e':
+                this.keys.down = false;
+                break;
+        }
     }
 }
