@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic copy.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -17,22 +17,30 @@ class Main {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
 
-        // new GLTFLoader().setPath('resources/').load('Sonic buildings.gltf', (gltf) => {
-        //     gltf.scene.traverse((object) => {
-        //         if (object.isMesh) {
-        //           object.castShadow = true;
-        //           object.receiveShadow = true;
-        //         }
-        //       });
-        //     this.scene.add(gltf.scene);
-        // });
+        const loader = new GLTFLoader().setPath('resources/building/').load('building.gltf', (gltf) => {
+            console.log(gltf); // Log to see if the model is loaded correctly
+            gltf.scene.traverse((object) => {
+                if (object.isMesh) {       
+                    //object set scalar by xyz
+                    object.scale.set(100, 100, 100);
+                    object.castShadow = true;
+                    object.receiveShadow = true;
+                }
+                gltf.scene.position.set(0, 0, 0)
+                this.scene.add(gltf.scene)
+            });
+        }, undefined, (error) => {
+            console.error('An error happened', error);
+        });
 
         // Plane
+        const ModelTexture = new THREE.TextureLoader().load('resources/sandTexture.jpg');
+
         this.planeSize = 30; // Store the plane size for boundary checks
-        var plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(this.planeSize, this.planeSize),
-            new THREE.MeshPhongMaterial({ color: 0xcbcbcb })
-        );
+        var planeGeometry = new THREE.PlaneGeometry(this.planeSize, this.planeSize);
+        var planeMaterial = new THREE.MeshStandardMaterial({ map: ModelTexture });
+
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         this.scene.add(plane);
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
@@ -72,7 +80,7 @@ class Main {
         this.thirdPersonCamera = new ThirdPersonCamera(
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
-        this.freeRoamCamera = new FreeRoamCamera(this.camera,100); // Speed set to 5 for FreeRoamCamera
+        this.freeRoamCamera = new FreeRoamCamera(this.camera, 100); // Speed set to 5 for FreeRoamCamera
 
         this.currentCamera = this.thirdPersonCamera;
 
