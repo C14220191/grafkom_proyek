@@ -200,40 +200,27 @@ export class FirstPersonCamera {
 }
 
 export class FreeRoamCamera {
-    constructor(camera, speed) {
+    constructor(camera) {
         this.camera = camera;
-        this.speed = speed;
-        this.direction = new THREE.Vector3();
+        this.moveSpeed = 5;
+        this.rotationSpeed = 1;
         this.keys = {
-            forward: false,
-            backward: false,
-            left: false,
-            right: false,
-            up: false,
-            down: false
+            "forward": false,
+            "backward": false,
+            "left": false,
+            "right": false,
+            "up": false,
+            "down": false,
+            "pitchUp": false,
+            "pitchDown": false,
+            "yawLeft": false,
+            "yawRight": false,
+            "rollLeft": false,
+            "rollRight": false
         };
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
-    }
-
-    setup(target, angle) {
-        // No setup needed for FreeRoamCamera, but keep the method to avoid errors
-    }
-
-    update(dt) {
-        const speed = this.speed * dt;
-        if (this.keys.forward) this.direction.z = -speed;
-        if (this.keys.backward) this.direction.z = speed;
-        if (this.keys.left) this.direction.x = -speed;
-        if (this.keys.right) this.direction.x = speed;
-        if (this.keys.up) this.direction.y = speed;
-        if (this.keys.down) this.direction.y = -speed;
-
-        this.camera.position.add(this.direction);
-
-        // Reset direction for the next frame
-        this.direction.set(0, 0, 0);
     }
 
     onKeyDown(event) {
@@ -251,10 +238,28 @@ export class FreeRoamCamera {
                 this.keys.right = true;
                 break;
             case 'q':
-                this.keys.up = true;
+                this.keys.rollLeft = true;
                 break;
             case 'e':
+                this.keys.rollRight = true;
+                break;
+            case 'r':
+                this.keys.up = true;
+                break;
+            case 'f':
                 this.keys.down = true;
+                break;
+            case 'ArrowUp':
+                this.keys.pitchUp = true;
+                break;
+            case 'ArrowDown':
+                this.keys.pitchDown = true;
+                break;
+            case 'ArrowLeft':
+                this.keys.yawLeft = true;
+                break;
+            case 'ArrowRight':
+                this.keys.yawRight = true;
                 break;
         }
     }
@@ -274,11 +279,73 @@ export class FreeRoamCamera {
                 this.keys.right = false;
                 break;
             case 'q':
-                this.keys.up = false;
+                this.keys.rollLeft = false;
                 break;
             case 'e':
+                this.keys.rollRight = false;
+                break;
+            case 'r':
+                this.keys.up = false;
+                break;
+            case 'f':
                 this.keys.down = false;
                 break;
+            case 'ArrowUp':
+                this.keys.pitchUp = false;
+                break;
+            case 'ArrowDown':
+                this.keys.pitchDown = false;
+                break;
+            case 'ArrowLeft':
+                this.keys.yawLeft = false;
+                break;
+            case 'ArrowRight':
+                this.keys.yawRight = false;
+                break;
+        }
+    }
+    setup(target, angle){
+        
+    }
+    update(dt) {
+        var moveSpeed = this.moveSpeed * dt;
+        var rotationSpeed = this.rotationSpeed * dt;
+
+        if (this.keys.forward) {
+            this.camera.translateZ(-moveSpeed);
+        }
+        if (this.keys.backward) {
+            this.camera.translateZ(moveSpeed);
+        }
+        if (this.keys.left) {
+            this.camera.translateX(-moveSpeed);
+        }
+        if (this.keys.right) {
+            this.camera.translateX(moveSpeed);
+        }
+        if (this.keys.up) {
+            this.camera.translateY(moveSpeed);
+        }
+        if (this.keys.down) {
+            this.camera.translateY(-moveSpeed);
+        }
+        if (this.keys.pitchUp) {
+            this.camera.rotation.x -= rotationSpeed;
+        }
+        if (this.keys.pitchDown) {
+            this.camera.rotation.x += rotationSpeed;
+        }
+        if (this.keys.yawLeft) {
+            this.camera.rotation.y -= rotationSpeed;
+        }
+        if (this.keys.yawRight) {
+            this.camera.rotation.y += rotationSpeed;
+        }
+        if (this.keys.rollLeft) {
+            this.camera.rotation.z -= rotationSpeed;
+        }
+        if (this.keys.rollRight) {
+            this.camera.rotation.z += rotationSpeed;
         }
     }
 }

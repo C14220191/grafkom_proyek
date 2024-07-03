@@ -1,6 +1,7 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic copy.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
 class Main {
     static init() {
@@ -15,6 +16,16 @@ class Main {
         this.renderer.setClearColor(0xffffff, 1);
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
+
+        // new GLTFLoader().setPath('resources/').load('Sonic buildings.gltf', (gltf) => {
+        //     gltf.scene.traverse((object) => {
+        //         if (object.isMesh) {
+        //           object.castShadow = true;
+        //           object.receiveShadow = true;
+        //         }
+        //       });
+        //     this.scene.add(gltf.scene);
+        // });
 
         // Plane
         this.planeSize = 30; // Store the plane size for boundary checks
@@ -61,7 +72,7 @@ class Main {
         this.thirdPersonCamera = new ThirdPersonCamera(
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
-        this.freeRoamCamera = new FreeRoamCamera(this.camera, 5); // Speed set to 5 for FreeRoamCamera
+        this.freeRoamCamera = new FreeRoamCamera(this.camera,100); // Speed set to 5 for FreeRoamCamera
 
         this.currentCamera = this.thirdPersonCamera;
 
@@ -151,7 +162,6 @@ class Main {
         }
         if (event.key === ' ') {
             this.sonic.startMoving();
-            status = 'on';
         }
     }
 }
