@@ -22,11 +22,11 @@ class Main {
             gltf.scene.traverse((object) => {
                 if (object.isMesh) {       
                     //object set scalar by xyz
-                    object.scale.set(100, 100, 100);
+                    object.scale.set(23, 30, 50);
                     object.castShadow = true;
                     object.receiveShadow = true;
                 }
-                gltf.scene.position.set(0, 0, 0)
+                gltf.scene.position.set(-9.5, -5.1, 0.1)
                 this.scene.add(gltf.scene)
             });
         }, undefined, (error) => {
