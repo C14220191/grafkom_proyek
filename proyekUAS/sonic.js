@@ -1,5 +1,6 @@
 import * as THREE from 'three';
 import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
+import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export class Sonic {
     constructor(camera, controller, scene, speed) {
@@ -347,5 +348,31 @@ export class FreeRoamCamera {
         if (this.keys.rollRight) {
             this.camera.rotation.z += rotationSpeed;
         }
+    }
+}
+
+export class OrbitCamera {
+    constructor(camera, scene) {
+        this.camera = camera;
+        this.controls = new OrbitControls(this.camera, document.getElementById('canvas'));
+        this.controls.enableDamping = true;
+        this.controls.dampingFactor = 0.05;
+        this.controls.screenSpacePanning = false;
+        this.controls.minDistance = 2;
+        this.controls.maxDistance = 20;
+        this.controls.maxPolarAngle = Math.PI / 2;
+
+        // This target will be updated to Sonic's position
+        this.target = new THREE.Vector3();
+        this.controls.target.copy(this.target);
+    }
+
+    setup(target) {
+        this.target.copy(target);
+        this.controls.target.copy(this.target);
+    }
+
+    update() {
+        this.controls.update();
     }
 }

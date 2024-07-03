@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera, OrbitCamera } from './sonic.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -81,6 +81,7 @@ class Main {
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
         this.freeRoamCamera = new FreeRoamCamera(this.camera, 100); // Speed set to 5 for FreeRoamCamera
+        this.orbitCamera = new OrbitCamera(this.camera, this.renderer.domElement);
 
         this.currentCamera = this.thirdPersonCamera;
 
@@ -116,6 +117,9 @@ class Main {
         // Update camera if it's a FreeRoamCamera
         if (this.currentCamera instanceof FreeRoamCamera) {
             this.currentCamera.update(dt);
+        } else if (this.currentCamera instanceof OrbitCamera) {
+            this.currentCamera.setup(this.sonic.mesh.position);
+            this.currentCamera.update();
         }
 
         this.renderer.render(this.scene, this.camera);
@@ -163,6 +167,8 @@ class Main {
                 this.currentCamera = this.thirdPersonCamera;
             } else if (this.currentCamera instanceof ThirdPersonCamera) {
                 this.currentCamera = this.freeRoamCamera;
+            } else if (this.currentCamera instanceof FreeRoamCamera) {
+                this.currentCamera = this.orbitCamera;
             } else {
                 this.currentCamera = this.firstPersonCamera;
             }
