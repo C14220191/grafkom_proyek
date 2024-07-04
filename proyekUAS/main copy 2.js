@@ -119,7 +119,8 @@ class Main {
         createBox(new THREE.BoxGeometry(5, 12, 40), transparentMaterial, new THREE.Vector3(-6, 0.5, 0)); // Building
         createBox(new THREE.BoxGeometry(5, 12, 5), transparentMaterial, new THREE.Vector3(5.85, 0.5, 13)); // Building
         createBox(new THREE.BoxGeometry(5, 12, 30), transparentMaterial, new THREE.Vector3(6.5, 0.5, -4)); // Building
-
+        createBox(new THREE.BoxGeometry(30, 1, 50), transparentMaterial, new THREE.Vector3(6.5, -0.5, -4)); // floor
+        
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
         this.scene.add(hemiLight);
@@ -156,7 +157,7 @@ class Main {
         this.thirdPersonCamera = new ThirdPersonCamera(
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
-        this.freeRoamCamera = new FreeRoamCamera(this.camera, 100); // Speed set to 5 for FreeRoamCamera
+        this.freeRoamCamera = new FreeRoamCamera(this.camera, this.object); // Speed set to 5 for FreeRoamCamera
         this.orbitCamera = new OrbitCamera(this.camera, this.renderer.domElement);
 
         this.currentCamera = this.thirdPersonCamera;
