@@ -123,8 +123,8 @@ class Main {
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
         this.scene.add(hemiLight);
-        var hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 1);
-        this.scene.add(hemiLightHelper);
+        // var hemiLightHelper = new THREE.HemisphereLightHelper(hemiLight, 1);
+        // this.scene.add(hemiLightHelper);
 
         // Directional light for shadows
         var directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Increase intensity
@@ -143,10 +143,10 @@ class Main {
         directionalLight.shadow.camera.top = d;
         directionalLight.shadow.camera.bottom = -d;
 
-        var directionalShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
-        this.scene.add(directionalShadowHelper);
-        var directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
-        this.scene.add(directionalLightHelper);
+        // var directionalShadowHelper = new THREE.CameraHelper(directionalLight.shadow.camera);
+        // this.scene.add(directionalShadowHelper);
+        // var directionalLightHelper = new THREE.DirectionalLightHelper(directionalLight, 1);
+        // // this.scene.add(directionalLightHelper);
         this.scene.add(directionalLight);
 
         // Set up Sonic
