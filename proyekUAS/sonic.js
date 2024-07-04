@@ -61,12 +61,13 @@ export class Sonic {
     
 
     startMoving() {
-        this.state = 'start';
+        if (this.state === 'idle') {
+            this.state = 'start';
+        }else{
+            this.state = 'idle';
+        }
     }
 
-    stopMoving(){
-        this.state = 'idle';
-    }
 
     update(dt) {
         if (!this.mesh) return;

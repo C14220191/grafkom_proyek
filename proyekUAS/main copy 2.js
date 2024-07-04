@@ -50,6 +50,22 @@ class Main {
 
         // Plane
         const ModelTexture = new THREE.TextureLoader().load('resources/sandTexture.jpg');
+     
+        const backgroundTexture = new THREE.CubeTextureLoader().setPath('resources/')
+        .load([
+            'posx.jpg',
+            'negx.jpg',
+            'posy.jpg',
+            'negy.jpg',
+            'posz.jpg',
+            'negz.jpg',
+        ]);
+
+        // Use the loaded texture as the scene's background
+        this.scene.background = backgroundTexture;
+
+        
+
 
         this.planeSize = 30; // Store the plane size for boundary checks
         var planeGeometry = new THREE.PlaneGeometry(this.planeSize, this.planeSize);
