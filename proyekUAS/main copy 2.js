@@ -48,6 +48,22 @@ class Main {
             console.error('An error happened', error);
         });
 
+        const loaderg = new GLTFLoader().setPath('resources/building/').load('brokenGlass.gltf', (gltf) => {
+            console.log(gltf); // Log to see if the model is loaded correctly
+            gltf.scene.traverse((object) => {
+                if (object.isMesh) {       
+                    object.castShadow = true;
+                    object.receiveShadow = true;
+                }
+                gltf.scene.rotation.y = Math.PI;
+                gltf.scene.position.set( 3.5, 0.8,5);
+
+                this.scene.add(gltf.scene);
+            });
+        }, undefined, (error) => {
+            console.error('An error happened', error);
+        });
+
         // Plane
         const ModelTexture = new THREE.TextureLoader().load('resources/sandTexture.jpg');
      
@@ -90,7 +106,7 @@ class Main {
         const transparentMaterial = new THREE.MeshStandardMaterial({ 
             color: 0x00ff00, 
             transparent: true, 
-            opacity: 1
+            opacity: 0
         });
 
         createBox(new THREE.BoxGeometry(2.2, 1, 0.3), transparentMaterial, new THREE.Vector3(0.1, 0.5, 3.1));
@@ -100,9 +116,9 @@ class Main {
         createBox(new THREE.BoxGeometry(5.555, 1, 0.3), transparentMaterial, new THREE.Vector3(-1.4, 0.5, -6.8));
         createBox(new THREE.BoxGeometry(2.2, 1, 0.3), transparentMaterial, new THREE.Vector3(3.03, 0.5, -11.2));
         createBox(new THREE.BoxGeometry(2.2, 1, 0.3), transparentMaterial, new THREE.Vector3(-2.5, 0.5, -11));
-        createBox(new THREE.BoxGeometry(5, 12, 30), transparentMaterial, new THREE.Vector3(-5.9, 0.5, 0)); // Building
-        createBox(new THREE.BoxGeometry(0.5, 12, 5), transparentMaterial, new THREE.Vector3(3.6, 0.5, 13)); // Building
-        createBox(new THREE.BoxGeometry(0.5, 12, 30), transparentMaterial, new THREE.Vector3(4.2, 0.5, -4)); // Building
+        createBox(new THREE.BoxGeometry(5, 12, 40), transparentMaterial, new THREE.Vector3(-6, 0.5, 0)); // Building
+        createBox(new THREE.BoxGeometry(5, 12, 5), transparentMaterial, new THREE.Vector3(5.85, 0.5, 13)); // Building
+        createBox(new THREE.BoxGeometry(5, 12, 30), transparentMaterial, new THREE.Vector3(6.5, 0.5, -4)); // Building
 
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);

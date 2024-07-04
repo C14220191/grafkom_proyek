@@ -291,22 +291,22 @@ export class FreeRoamCamera {
 
     onKeyDown(event) {
         switch (event.key) {
-            case 'w':
+            case 'i':
                 this.keys.forward = true;
                 break;
-            case 's':
+            case 'k':
                 this.keys.backward = true;
                 break;
-            case 'a':
+            case 'j':
                 this.keys.left = true;
                 break;
-            case 'd':
+            case 'l':
                 this.keys.right = true;
                 break;
-            case 'q':
+            case 'u':
                 this.keys.rollLeft = true;
                 break;
-            case 'e':
+            case 'o':
                 this.keys.rollRight = true;
                 break;
             case 'r':
@@ -332,22 +332,22 @@ export class FreeRoamCamera {
 
     onKeyUp(event) {
         switch (event.key) {
-            case 'w':
+            case 'i':
                 this.keys.forward = false;
                 break;
-            case 's':
+            case 'k':
                 this.keys.backward = false;
                 break;
-            case 'a':
+            case 'j':
                 this.keys.left = false;
                 break;
-            case 'd':
+            case 'l':
                 this.keys.right = false;
                 break;
-            case 'q':
+            case 'u':
                 this.keys.rollLeft = false;
                 break;
-            case 'e':
+            case 'o':
                 this.keys.rollRight = false;
                 break;
             case 'r':
