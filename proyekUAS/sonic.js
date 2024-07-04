@@ -32,6 +32,15 @@ export class Sonic {
             fbx.traverse(c => {
                 c.castShadow = true;
                 c.receiveShadow = true;
+                if(c.isMesh && c.material){
+                    c.material.color.setHex(0xffffff);
+                    // Set the specular color (e.g., light gray)
+                    c.material.specular.setHex(0xaaaaaa);
+                    // Set the ambient color (e.g., light gray, but note that Three.js does not have ambient material directly)
+                    // Instead, you might want to use AmbientLight in the scene
+                    c.material.shininess = 30; // Set the shininess for specular highlights
+                    c.material.needsUpdate = true; // Ensure material properties are updated
+                }
             });
             this.mesh = fbx;
             this.scene.add(this.mesh);
