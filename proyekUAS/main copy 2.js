@@ -170,7 +170,7 @@ class Main {
         );
 
         // Add a light specifically for Sonic
-        this.sonicLight = new THREE.PointLight(0xffffff, 7, 50); // Bright white light
+        this.sonicLight = new THREE.PointLight(0xf5d4a9, 5, 50); // Bright white light
         this.scene.add(this.sonicLight);
 
         // Add event listeners for zooming and switching cameras
