@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic copy.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera, OrbitCamera } from './sonic.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -17,25 +17,54 @@ class Main {
         this.renderer.shadowMap.enabled = true;
         this.renderer.shadowMap.type = THREE.PCFSoftShadowMap; // Soft shadows
 
-        // new GLTFLoader().setPath('resources/').load('Sonic buildings.gltf', (gltf) => {
-        //     gltf.scene.traverse((object) => {
-        //         if (object.isMesh) {
-        //           object.castShadow = true;
-        //           object.receiveShadow = true;
-        //         }
-        //       });
-        //     this.scene.add(gltf.scene);
-        // });
+        const loader = new GLTFLoader().setPath('resources/building/').load('building.gltf', (gltf) => {
+            console.log(gltf); // Log to see if the model is loaded correctly
+            gltf.scene.traverse((object) => {
+                if (object.isMesh) {       
+                    //object set scalar by xyz
+                    object.scale.set(21.5, 40, 50);
+                    object.castShadow = true;
+                    object.receiveShadow = true;
+                }
+                gltf.scene.position.set(-9.5, -4.5, 2);
+                this.scene.add(gltf.scene);
+            });
+        }, undefined, (error) => {
+            console.error('An error happened', error);
+        });
 
         // Plane
+        const ModelTexture = new THREE.TextureLoader().load('resources/sandTexture.jpg');
+
         this.planeSize = 30; // Store the plane size for boundary checks
-        var plane = new THREE.Mesh(
-            new THREE.PlaneGeometry(this.planeSize, this.planeSize),
-            new THREE.MeshPhongMaterial({ color: 0xcbcbcb })
-        );
+        var planeGeometry = new THREE.PlaneGeometry(this.planeSize, this.planeSize);
+        var planeMaterial = new THREE.MeshStandardMaterial({ map: ModelTexture });
+
+        var plane = new THREE.Mesh(planeGeometry, planeMaterial);
         this.scene.add(plane);
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
+        
+        this.object = [];
+
+        const createBox = (geometry, material, position) => {
+            const box = new THREE.Mesh(geometry, material);
+            box.position.copy(position);
+            box.geometry.computeBoundingBox();
+            box.boundingBox = new THREE.Box3().setFromObject(box);
+            this.object.push(box);
+            this.scene.add(box);
+        };
+
+        createBox(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(0.1, 0.5, 3.1));
+        createBox(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(-2.5, 0.5, 0.6));
+        createBox(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(3, 0.5, 0.3));
+        createBox(new THREE.BoxGeometry(5.555, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(2.5, 0.5, -3.2));
+        createBox(new THREE.BoxGeometry(5.555, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(-1.4, 0.5, -6.8));
+        createBox(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(3.03, 0.5, -11.2));
+        createBox(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(-2.5, 0.5, -11));
+        createBox(new THREE.BoxGeometry(0.01, 12, 30), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(-3.3999, 0.5, 0));
+        createBox(new THREE.BoxGeometry(0.01, 12, 30), new THREE.MeshStandardMaterial({ color: 0x00ff00 }), new THREE.Vector3(3.3, 0.5, 0));
 
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
@@ -44,13 +73,14 @@ class Main {
         this.scene.add(hemiLightHelper);
 
         // Directional light for shadows
-        var directionalLight = new THREE.DirectionalLight(0xffffff, 1);
+        var directionalLight = new THREE.DirectionalLight(0xffffff, 1.5); // Increase intensity
         directionalLight.position.set(3, 10, 10);
         directionalLight.castShadow = true;
 
         // Adjust shadow settings
-        directionalLight.shadow.mapSize.width = 1024; // Optional: increase shadow map size
-        directionalLight.shadow.mapSize.height = 1024; // Optional: increase shadow map size
+        directionalLight.shadow.mapSize.width = 2048; // Increase shadow map size
+        directionalLight.shadow.mapSize.height = 2048; // Increase shadow map size
+        directionalLight.shadow.bias = -0.00005; // Reduce shadow acne
 
         // Set up shadow camera frustum
         var d = 15;
@@ -72,7 +102,8 @@ class Main {
         this.thirdPersonCamera = new ThirdPersonCamera(
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
-        this.freeRoamCamera = new FreeRoamCamera(this.camera,100); // Speed set to 5 for FreeRoamCamera
+        this.freeRoamCamera = new FreeRoamCamera(this.camera, 100); // Speed set to 5 for FreeRoamCamera
+        this.orbitCamera = new OrbitCamera(this.camera, this.renderer.domElement);
 
         this.currentCamera = this.thirdPersonCamera;
 
@@ -80,7 +111,8 @@ class Main {
             this.currentCamera,
             new SonicController(),
             this.scene,
-            1 // Adjust speed as necessary
+            3,// Adjust speed as necessary
+            this.object
         );
 
         // Add a light specifically for Sonic
@@ -108,6 +140,9 @@ class Main {
         // Update camera if it's a FreeRoamCamera
         if (this.currentCamera instanceof FreeRoamCamera) {
             this.currentCamera.update(dt);
+        } else if (this.currentCamera instanceof OrbitCamera) {
+            this.currentCamera.setup(this.sonic.mesh.position);
+            this.currentCamera.update();
         }
 
         this.renderer.render(this.scene, this.camera);
@@ -155,7 +190,9 @@ class Main {
                 this.currentCamera = this.thirdPersonCamera;
             } else if (this.currentCamera instanceof ThirdPersonCamera) {
                 this.currentCamera = this.freeRoamCamera;
-            } else {
+            }else if (this.currentCamera instanceof FreeRoamCamera) {
+                this.currentCamera = this.orbitCamera;
+             } else {
                 this.currentCamera = this.firstPersonCamera;
             }
             this.sonic.camera = this.currentCamera; // Update Sonic's camera directly

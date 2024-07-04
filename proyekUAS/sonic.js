@@ -3,18 +3,18 @@ import { FBXLoader } from 'three/addons/loaders/FBXLoader.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 
 export class Sonic {
-    constructor(camera, controller, scene, speed) {
+    constructor(camera, controller, scene, speed, object) {
         this.camera = camera;
         this.controller = controller;
         this.scene = scene;
         this.speed = speed;
         this.rotationVector = new THREE.Vector3();
+        this.object = object || []
 
         this.state = 'idle';
         this.animations = {};
-
         this.boxTemp = null; // Add this line in the constructor
-
+        this.boundingBox = new THREE.Box3(); // Inisialisasi boundingBox
 
         if (this.camera.setup) {
             this.camera.setup(new THREE.Vector3(0, 0, 0), this.rotationVector);
@@ -64,6 +64,10 @@ export class Sonic {
         this.state = 'start';
     }
 
+    stopMoving(){
+        this.state = 'idle';
+    }
+
     update(dt) {
         if (!this.mesh) return;
         var direction = new THREE.Vector3(0, 0, 0);
@@ -96,6 +100,12 @@ export class Sonic {
                 direction.z = 5;
                 tilt = tiltSpeed; // Tilt to the right
             }
+            // if (this.controller.keys['forward']) {
+            //     direction.x = 5;
+            // }
+            if (this.controller.keys['backward']) {
+                direction.x = -5;
+            }
             if (!this.controller.keys['left'] && !this.controller.keys['right']) {
                 if (this.mesh.rotation.y > 0) {
                     this.mesh.rotation.y -= tiltSpeed;
@@ -111,32 +121,54 @@ export class Sonic {
             }
         }
     
+        // Define the movement vector before using it
         var forwardVector = new THREE.Vector3(1, 0, 0);
         var rightVector = new THREE.Vector3(0, 0, 1);
         forwardVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
         rightVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
     
-        this.mesh.position.add(forwardVector.multiplyScalar(direction.x * this.speed * dt));
-        this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
+        var movement = new THREE.Vector3();
+        movement.add(forwardVector.multiplyScalar(direction.x * this.speed * dt));
+        movement.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
+    
+        this.mesh.position.add(movement);
+    
+        // Create a bounding box for the mesh if it doesn't exist
+        if (!this.boundingBox) {
+            this.boundingBox = new THREE.Box3().setFromObject(this.mesh);
+        } else {
+            this.boundingBox.setFromObject(this.mesh);
+        }
+    
+        // Check for collisions and undo movement if necessary
+        for (let obj of this.object) { // Changed objects to object
+            if (this.boundingBox.intersectsBox(obj.boundingBox)) {
+                this.mesh.position.sub(movement); // Undo the movement
+                break; // Exit the loop early to avoid multiple corrections
+            }
+        }
     
         this.mesh.rotation.y += tilt;
         this.mesh.rotation.y = Math.max(-maxTilt, Math.min(maxTilt, this.mesh.rotation.y));
     
         this.camera.setup(this.mesh.position, new THREE.Vector3(0, 1.5, 0)); // Set angle to zero
-        
+    
         // Update the position of boxTemp to match Sonic's position
         if (this.boxTemp) {
             this.boxTemp.position.copy(this.mesh.position);
             this.boxTemp.position.y += 0.5;
         }
-    }    
+    }
+        
 }
 
 export class SonicController {
     constructor() {
         this.keys = {
             "left": false,
-            "right": false
+            "right": false,
+            "forward": false,
+            "backward": false
         };
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
@@ -153,6 +185,14 @@ export class SonicController {
             case 'D':
                 this.keys.right = true;
                 break;
+            case 'w':
+            case 'W':
+                this.keys.forward = true;
+                break;
+            case 's':
+            case 'S':
+                this.keys.backward = true;
+                break;
         }
     }
 
@@ -165,6 +205,14 @@ export class SonicController {
             case 'd':
             case 'D':
                 this.keys.right = false;
+                break;
+            case 'w':
+            case 'W':
+                this.keys.forward = false;
+                break;
+            case 's':
+            case 'S':
+                this.keys.backward = false;
                 break;
         }
     }
