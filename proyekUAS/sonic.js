@@ -22,7 +22,7 @@ export class Sonic {
         this.loadModel();
     }
 
-    loadModel(path) {
+    loadModel() {
         var loader = new FBXLoader();
         loader.setPath('./resources/');
         loader.load('Looking Around.fbx', (fbx) => {
@@ -74,7 +74,7 @@ export class Sonic {
         var direction = new THREE.Vector3(0, 0, 0);
         var tilt = 0;
         const maxTilt = Math.PI / 6; // Maximum tilt angle (30 degrees)
-        const tiltSpeed = 0.05;
+        const tiltSpeed = 0.1;
     
         if (this.state === 'idle') {
             if (this.animations['idle']) {
@@ -258,7 +258,7 @@ export class FirstPersonCamera {
 }
 
 export class FreeRoamCamera {
-    constructor(camera) {
+    constructor(camera, obstacles) {
         this.camera = camera;
         this.moveSpeed = 10;
         this.rotationSpeed = 1;
@@ -276,6 +276,10 @@ export class FreeRoamCamera {
             "rollLeft": false,
             "rollRight": false
         };
+        this.rotationVector = new THREE.Vector3(0, 0, 0);
+        this.tempCameraPos = new THREE.Vector3(); // Add temporary position vector
+        this.obstacles = obstacles || []; // Obstacle array for collision detection
+        this.cameraBox = new THREE.Box3(new THREE.Vector3(), new THREE.Vector3()); // Bounding box for the camera
 
         document.addEventListener('keydown', (e) => this.onKeyDown(e), false);
         document.addEventListener('keyup', (e) => this.onKeyUp(e), false);
@@ -295,29 +299,29 @@ export class FreeRoamCamera {
             case 'd':
                 this.keys.right = true;
                 break;
-            case 'q':
-                this.keys.rollLeft = true;
-                break;
-            case 'e':
-                this.keys.rollRight = true;
-                break;
             case 'r':
                 this.keys.up = true;
                 break;
             case 'f':
                 this.keys.down = true;
                 break;
-            case 'i':
+            case 'ArrowUp':
                 this.keys.pitchUp = true;
                 break;
-            case 'k':
+            case 'ArrowDown':
                 this.keys.pitchDown = true;
                 break;
-            case 'j':
+            case 'ArrowLeft':
                 this.keys.yawLeft = true;
                 break;
-            case 'l':
+            case 'ArrowRight':
                 this.keys.yawRight = true;
+                break;
+            case 'q':
+                this.keys.rollLeft = true;
+                break;
+            case 'e':
+                this.keys.rollRight = true;
                 break;
         }
     }
@@ -336,76 +340,80 @@ export class FreeRoamCamera {
             case 'd':
                 this.keys.right = false;
                 break;
-            case 'q':
-                this.keys.rollLeft = false;
-                break;
-            case 'e':
-                this.keys.rollRight = false;
-                break;
             case 'r':
                 this.keys.up = false;
                 break;
             case 'f':
                 this.keys.down = false;
                 break;
-            case 'i':
+            case 'ArrowUp':
                 this.keys.pitchUp = false;
                 break;
-            case 'k':
+            case 'ArrowDown':
                 this.keys.pitchDown = false;
                 break;
-            case 'j':
+            case 'ArrowLeft':
                 this.keys.yawLeft = false;
                 break;
-            case 'l':
+            case 'ArrowRight':
                 this.keys.yawRight = false;
+                break;
+            case 'q':
+                this.keys.rollLeft = false;
+                break;
+            case 'e':
+                this.keys.rollRight = false;
                 break;
         }
     }
-    setup(target, angle){
+
+    update(dt) {
+        const moveVector = new THREE.Vector3();
+        const rotationVector = new THREE.Vector3();
+
+        if (this.keys.forward) moveVector.z -= this.moveSpeed * dt;
+        if (this.keys.backward) moveVector.z += this.moveSpeed * dt;
+        if (this.keys.left) moveVector.x -= this.moveSpeed * dt;
+        if (this.keys.right) moveVector.x += this.moveSpeed * dt;
+        if (this.keys.up) moveVector.y += this.moveSpeed * dt;
+        if (this.keys.down) moveVector.y -= this.moveSpeed * dt;
+
+        if (this.keys.pitchUp) rotationVector.x -= this.rotationSpeed * dt;
+        if (this.keys.pitchDown) rotationVector.x += this.rotationSpeed * dt;
+        if (this.keys.yawLeft) rotationVector.y -= this.rotationSpeed * dt;
+        if (this.keys.yawRight) rotationVector.y += this.rotationSpeed * dt;
+        if (this.keys.rollLeft) rotationVector.z -= this.rotationSpeed * dt;
+        if (this.keys.rollRight) rotationVector.z += this.rotationSpeed * dt;
+
+        // Update rotation
+        this.rotationVector.add(rotationVector);
+        this.camera.rotation.set(this.rotationVector.x, this.rotationVector.y, this.rotationVector.z);
+
+        // Apply movement
+        this.tempCameraPos.copy(this.camera.position); // Store current position
+        this.tempCameraPos.add(moveVector.applyEuler(this.camera.rotation)); // Move the temporary position
+
+        // Update the camera bounding box
+        this.cameraBox.setFromCenterAndSize(this.tempCameraPos, new THREE.Vector3(1, 1, 1)); // Adjust size as needed
+
+        // Check for collisions
+        let collision = false;
+        for (let obstacle of this.obstacles) {
+            if (this.cameraBox.intersectsBox(obstacle.boundingBox)) {
+                collision = true;
+                break;
+            }
+        }
+
+        // If no collision, update the camera position
+        if (!collision) {
+            this.camera.position.copy(this.tempCameraPos);
+        }
+    }
+    setup(target,angle){
         
     }
-    update(dt) {
-        var moveSpeed = this.moveSpeed * dt;
-        var rotationSpeed = this.rotationSpeed * dt;
 
-        if (this.keys.forward) {
-            this.camera.translateZ(-moveSpeed);
-        }
-        if (this.keys.backward) {
-            this.camera.translateZ(moveSpeed);
-        }
-        if (this.keys.left) {
-            this.camera.translateX(-moveSpeed);
-        }
-        if (this.keys.right) {
-            this.camera.translateX(moveSpeed);
-        }
-        if (this.keys.up) {
-            this.camera.translateY(moveSpeed);
-        }
-        if (this.keys.down) {
-            this.camera.translateY(-moveSpeed);
-        }
-        if (this.keys.pitchUp) {
-            this.camera.rotation.x += rotationSpeed;
-        }
-        if (this.keys.pitchDown) {
-            this.camera.rotation.x -= rotationSpeed;
-        }
-        if (this.keys.yawLeft) {
-            this.camera.rotation.y += rotationSpeed;
-        }
-        if (this.keys.yawRight) {
-            this.camera.rotation.y -= rotationSpeed;
-        }
-        if (this.keys.rollLeft) {
-            this.camera.rotation.z += rotationSpeed;
-        }
-        if (this.keys.rollRight) {
-            this.camera.rotation.z -= rotationSpeed;
-        }
-    }
 }
 
 export class OrbitCamera {
