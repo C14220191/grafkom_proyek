@@ -94,18 +94,18 @@ export class Sonic {
                 this.mixer.update(dt);
             }
             if (this.controller.keys['left']) {
-                direction.z = -5;
+                direction.z = -2;
                 tilt = -tiltSpeed; // Tilt to the left
             }
             if (this.controller.keys['right']) {
-                direction.z = 5;
+                direction.z = 2;
                 tilt = tiltSpeed; // Tilt to the right
             }
             // if (this.controller.keys['forward']) {
             //     direction.x = 5;
             // }
             if (this.controller.keys['backward']) {
-                direction.x = -5;
+                direction.x = -2;
             }
             if (!this.controller.keys['left'] && !this.controller.keys['right']) {
                 if (this.mesh.rotation.y > 0) {
