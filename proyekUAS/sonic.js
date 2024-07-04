@@ -178,20 +178,16 @@ export class SonicController {
 
     onKeyDown(event) {
         switch (event.key) {
-            case 'a':
-            case 'A':
+            case 'ArrowLeft':
                 this.keys.left = true;
                 break;
-            case 'd':
-            case 'D':
+            case 'ArrowRight':
                 this.keys.right = true;
                 break;
-            case 'w':
-            case 'W':
+            case 'ArrowUp':
                 this.keys.forward = true;
                 break;
-            case 's':
-            case 'S':
+            case 'ArrowDown':
                 this.keys.backward = true;
                 break;
         }
@@ -199,20 +195,16 @@ export class SonicController {
 
     onKeyUp(event) {
         switch (event.key) {
-            case 'a':
-            case 'A':
+            case 'ArrowLeft':
                 this.keys.left = false;
                 break;
-            case 'd':
-            case 'D':
+            case 'ArrowRight':
                 this.keys.right = false;
                 break;
-            case 'w':
-            case 'W':
+            case 'ArrowUp':
                 this.keys.forward = false;
                 break;
-            case 's':
-            case 'S':
+            case 'ArrowDown':
                 this.keys.backward = false;
                 break;
         }
@@ -291,22 +283,22 @@ export class FreeRoamCamera {
 
     onKeyDown(event) {
         switch (event.key) {
-            case 'i':
+            case 'w':
                 this.keys.forward = true;
                 break;
-            case 'k':
+            case 's':
                 this.keys.backward = true;
                 break;
-            case 'j':
+            case 'a':
                 this.keys.left = true;
                 break;
-            case 'l':
+            case 'd':
                 this.keys.right = true;
                 break;
-            case 'u':
+            case 'q':
                 this.keys.rollLeft = true;
                 break;
-            case 'o':
+            case 'e':
                 this.keys.rollRight = true;
                 break;
             case 'r':
@@ -315,16 +307,16 @@ export class FreeRoamCamera {
             case 'f':
                 this.keys.down = true;
                 break;
-            case 'ArrowUp':
+            case 'i':
                 this.keys.pitchUp = true;
                 break;
-            case 'ArrowDown':
+            case 'k':
                 this.keys.pitchDown = true;
                 break;
-            case 'ArrowLeft':
+            case 'j':
                 this.keys.yawLeft = true;
                 break;
-            case 'ArrowRight':
+            case 'l':
                 this.keys.yawRight = true;
                 break;
         }
@@ -332,22 +324,22 @@ export class FreeRoamCamera {
 
     onKeyUp(event) {
         switch (event.key) {
-            case 'i':
+            case 'w':
                 this.keys.forward = false;
                 break;
-            case 'k':
+            case 's':
                 this.keys.backward = false;
                 break;
-            case 'j':
+            case 'a':
                 this.keys.left = false;
                 break;
-            case 'l':
+            case 'd':
                 this.keys.right = false;
                 break;
-            case 'u':
+            case 'q':
                 this.keys.rollLeft = false;
                 break;
-            case 'o':
+            case 'e':
                 this.keys.rollRight = false;
                 break;
             case 'r':
@@ -356,16 +348,16 @@ export class FreeRoamCamera {
             case 'f':
                 this.keys.down = false;
                 break;
-            case 'ArrowUp':
+            case 'i':
                 this.keys.pitchUp = false;
                 break;
-            case 'ArrowDown':
+            case 'k':
                 this.keys.pitchDown = false;
                 break;
-            case 'ArrowLeft':
+            case 'j':
                 this.keys.yawLeft = false;
                 break;
-            case 'ArrowRight':
+            case 'l':
                 this.keys.yawRight = false;
                 break;
         }
