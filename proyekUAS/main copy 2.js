@@ -1,5 +1,5 @@
 import * as THREE from 'three';
-import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera } from './sonic.js';
+import { Sonic, SonicController, ThirdPersonCamera, FirstPersonCamera, FreeRoamCamera, OrbitCamera } from './sonic.js';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 
@@ -45,6 +45,54 @@ class Main {
         plane.rotation.x = -Math.PI / 2;
         plane.receiveShadow = true;
 
+        const collidableObjects = [];
+
+        //box
+        const box = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box.position.set(0.1, 0.5, 3.1);
+        this.scene.add(box);
+        collidableObjects.push(box);
+
+        const box2 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box2.position.set(-2.5, 0.5, 0.6);
+        this.scene.add(box2);
+        collidableObjects.push(box2);
+
+        const box3 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box3.position.set(3, 0.5, 0.3);
+        this.scene.add(box3);
+        collidableObjects.push(box3);
+
+        const box4 = new THREE.Mesh(new THREE.BoxGeometry(5.555, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box4.position.set(2.5, 0.5, -3.2);
+        this.scene.add(box4);
+        collidableObjects.push(box4);
+
+        const box5 = new THREE.Mesh(new THREE.BoxGeometry(5.555, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box5.position.set(-1.4, 0.5, -6.8);
+        this.scene.add(box5);
+        collidableObjects.push(box5);
+
+        const box6 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box6.position.set(3.03, 0.5, -11.2);
+        this.scene.add(box6);
+        collidableObjects.push(box6);
+
+        const box7 = new THREE.Mesh(new THREE.BoxGeometry(2.2, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box7.position.set(-2.5, 0.5, -11);
+        this.scene.add(box7);
+        collidableObjects.push(box7);
+
+        const box8 = new THREE.Mesh(new THREE.BoxGeometry(0.01, 12, 30), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box8.position.set(-3.3999   , 0.5, 0);
+        this.scene.add(box8);
+        collidableObjects.push(box8)
+
+        const box9 = new THREE.Mesh(new THREE.BoxGeometry(0.01, 12, 30), new THREE.MeshStandardMaterial({ color: 0x00ff00 }));
+        box9.position.set(3.3, 0.5, 0);
+        this.scene.add(box9);
+        collidableObjects.push(box9)
+
         var hemiLight = new THREE.HemisphereLight(0xffffff, 0xffffff, 1);
         hemiLight.position.set(0, 20, 0);
         this.scene.add(hemiLight);
@@ -82,6 +130,7 @@ class Main {
             this.camera, new THREE.Vector3(-2, 2, 0), new THREE.Vector3(0, 0, 0)
         );
         this.freeRoamCamera = new FreeRoamCamera(this.camera, 100); // Speed set to 5 for FreeRoamCamera
+        this.orbitCamera = new OrbitCamera(this.camera, this.renderer.domElement);
 
         this.currentCamera = this.thirdPersonCamera;
 
@@ -89,8 +138,11 @@ class Main {
             this.currentCamera,
             new SonicController(),
             this.scene,
-            3 // Adjust speed as necessary
+            3, // Adjust speed as necessary
+            collidableObjects
         );
+        this.sonic.createPlayerBox();
+        this.scene.add(this.sonic.boxTemp);
 
         // Add a light specifically for Sonic
         this.sonicLight = new THREE.PointLight(0xffffff, 7, 50); // Bright white light
@@ -117,6 +169,9 @@ class Main {
         // Update camera if it's a FreeRoamCamera
         if (this.currentCamera instanceof FreeRoamCamera) {
             this.currentCamera.update(dt);
+        } else if (this.currentCamera instanceof OrbitCamera) {
+            this.currentCamera.setup(this.sonic.mesh.position);
+            this.currentCamera.update();
         }
 
         this.renderer.render(this.scene, this.camera);
@@ -164,7 +219,9 @@ class Main {
                 this.currentCamera = this.thirdPersonCamera;
             } else if (this.currentCamera instanceof ThirdPersonCamera) {
                 this.currentCamera = this.freeRoamCamera;
-            } else {
+            }else if (this.currentCamera instanceof FreeRoamCamera) {
+                this.currentCamera = this.orbitCamera;
+             } else {
                 this.currentCamera = this.firstPersonCamera;
             }
             this.sonic.camera = this.currentCamera; // Update Sonic's camera directly

@@ -13,6 +13,9 @@ export class Sonic {
         this.state = 'idle';
         this.animations = {};
 
+        this.boxTemp = null; // Add this line in the constructor
+
+
         if (this.camera.setup) {
             this.camera.setup(new THREE.Vector3(0, 0, 0), this.rotationVector);
         }
@@ -47,8 +50,15 @@ export class Sonic {
             loader.setPath('./resources/');
             loader.load('Looking Around.fbx', (fbx) => { onLoad('idle', fbx) });
             loader.load('Running.fbx', (fbx) => { onLoad('start', fbx) });
+            this.createPlayerBox()
         });
     }
+
+    createPlayerBox() {
+        this.boxTemp = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00f000 }));
+        this.scene.add(this.boxTemp);
+    }
+    
 
     startMoving() {
         this.state = 'start';
@@ -60,7 +70,7 @@ export class Sonic {
         var tilt = 0;
         const maxTilt = Math.PI / 6; // Maximum tilt angle (30 degrees)
         const tiltSpeed = 0.05;
-
+    
         if (this.state === 'idle') {
             if (this.animations['idle']) {
                 if (!this.animations['idle'].action.isRunning()) {
@@ -100,20 +110,26 @@ export class Sonic {
                 }
             }
         }
-
+    
         var forwardVector = new THREE.Vector3(1, 0, 0);
         var rightVector = new THREE.Vector3(0, 0, 1);
         forwardVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
         rightVector.applyAxisAngle(new THREE.Vector3(0, 1, 0), this.rotationVector.y);
-
+    
         this.mesh.position.add(forwardVector.multiplyScalar(direction.x * this.speed * dt));
         this.mesh.position.add(rightVector.multiplyScalar(direction.z * this.speed * dt));
-
+    
         this.mesh.rotation.y += tilt;
         this.mesh.rotation.y = Math.max(-maxTilt, Math.min(maxTilt, this.mesh.rotation.y));
-
+    
         this.camera.setup(this.mesh.position, new THREE.Vector3(0, 1.5, 0)); // Set angle to zero
-    }
+        
+        // Update the position of boxTemp to match Sonic's position
+        if (this.boxTemp) {
+            this.boxTemp.position.copy(this.mesh.position);
+            this.boxTemp.position.y += 0.5;
+        }
+    }    
 }
 
 export class SonicController {
@@ -203,7 +219,7 @@ export class FirstPersonCamera {
 export class FreeRoamCamera {
     constructor(camera) {
         this.camera = camera;
-        this.moveSpeed = 5;
+        this.moveSpeed = 10;
         this.rotationSpeed = 1;
         this.keys = {
             "forward": false,
@@ -331,22 +347,22 @@ export class FreeRoamCamera {
             this.camera.translateY(-moveSpeed);
         }
         if (this.keys.pitchUp) {
-            this.camera.rotation.x -= rotationSpeed;
-        }
-        if (this.keys.pitchDown) {
             this.camera.rotation.x += rotationSpeed;
         }
-        if (this.keys.yawLeft) {
-            this.camera.rotation.y -= rotationSpeed;
+        if (this.keys.pitchDown) {
+            this.camera.rotation.x -= rotationSpeed;
         }
-        if (this.keys.yawRight) {
+        if (this.keys.yawLeft) {
             this.camera.rotation.y += rotationSpeed;
         }
+        if (this.keys.yawRight) {
+            this.camera.rotation.y -= rotationSpeed;
+        }
         if (this.keys.rollLeft) {
-            this.camera.rotation.z -= rotationSpeed;
+            this.camera.rotation.z += rotationSpeed;
         }
         if (this.keys.rollRight) {
-            this.camera.rotation.z += rotationSpeed;
+            this.camera.rotation.z -= rotationSpeed;
         }
     }
 }
