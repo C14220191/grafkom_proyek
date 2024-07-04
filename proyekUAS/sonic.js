@@ -56,7 +56,7 @@ export class Sonic {
 
     createPlayerBox() {
         this.boxTemp = new THREE.Mesh(new THREE.BoxGeometry(0.5, 1, 0.3), new THREE.MeshStandardMaterial({ color: 0x00f000 }));
-        this.scene.add(this.boxTemp);
+        
     }
     
 
